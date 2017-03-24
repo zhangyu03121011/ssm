@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.app.ISysAppDao" >
+
+  <resultMap id="BaseResultMap" type="SysAppVo" >
+    <id column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+    <result column="app_url" property="appUrl" jdbcType="VARCHAR" />
+    <result column="app_index" property="appIndex" jdbcType="VARCHAR" />
+    <result column="app_icon" property="appIcon" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseObjectResultMap" extends="BaseResultMap" type="SysAppVo">
+    <collection property="sysMenuModels" javaType="ArrayList" ofType="SysMenuModel">
+	    <id column="menu_id" property="menuId" jdbcType="VARCHAR" />
+	    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+	    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+	    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+	    <result column="menu_key" property="menuKey" jdbcType="VARCHAR" />
+	    <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+	    <result column="win_type" property="winType" jdbcType="VARCHAR" />
+	    <result column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+	    <result column="sort" property="sort" jdbcType="INTEGER" />
+	    <result column="visible" property="visible" jdbcType="CHAR" />
+	    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="descr" property="descr" jdbcType="VARCHAR" />
+    </collection>
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    app_id, app_key, app_name,app_url,app_index,app_icon,sort, isavailable, create_by, create_time, update_by, update_time, 
+    descr
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_app
+    where app_id = #{appId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysAppVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_app
+    where isavailable = 1
+    and	app_key = #{appKey,jdbcType=VARCHAR}
+    or app_name = #{appName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getPage" resultMap="BaseResultMap" parameterType="SysAppVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_app
+    where isavailable = 1
+    <if test="appKey != null" >
+      and app_key like CONCAT('%',#{appKey,jdbcType=VARCHAR},'%')
+    </if>
+    <if test="appName != null" >
+      and app_name like CONCAT('%',#{appName,jdbcType=VARCHAR},'%') 
+    </if>
+    order by sort
+  </select>
+  
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysAppVo" >
+  	<choose>
+  		<when test="adminFlag==false and userId!=null">
+  			select 
+		    	t1.*
+		    from t_sys_app t1 inner join t_sys_user_app t2 on t1.app_id=t2.app_id
+		    where t1.isavailable = 1
+		    and t2.isavailable=1
+		    and t2.user_id=#{userId,jdbcType=VARCHAR}
+		    order by t1.sort
+  		</when>
+  		<otherwise>
+		    select 
+		    	<include refid="Base_Column_List" />
+		    from t_sys_app t1
+		    where isavailable = 1
+		    order by sort
+  		</otherwise>
+  	</choose>
+  </select>
+  
+  <select id="getAllObject" resultMap="BaseObjectResultMap" parameterType="SysAppVo" >
+  	<choose>
+  		<when test="adminFlag==true">
+		    SELECT
+				t1.app_id,
+				t1.app_key,
+				t1.app_name,
+				t1.app_url,
+				t1.app_index,
+				t1.app_icon,
+				t1.sort,
+				t2.*
+			FROM
+				t_sys_app t1
+			INNER JOIN t_sys_menu t2 ON t1.app_id = t2.app_id 
+			WHERE
+				t1.isavailable = 1
+			AND t2.isavailable = 1 
+			AND t2.visible = 1
+			ORDER BY
+				t1.app_id,
+				t2.parent_id,
+				t2.sort
+  		</when>
+  		<otherwise>
+	    	SELECT
+				t1.app_id,
+				t1.app_key,
+				t1.app_name,
+				t1.app_url,
+				t1.app_index,
+				t1.app_icon,
+				t1.sort,
+				t2.*
+			FROM
+				t_sys_app t1
+			INNER JOIN t_sys_menu t2 ON t1.app_id = t2.app_id 
+			INNER JOIN t_sys_user_app t3 on t1.app_id=t3.app_id
+			INNER JOIN t_sys_user_role t4 on t3.user_id=t4.user_id
+			INNER JOIN t_sys_role_menu t5 on t5.role_id=t4.role_id and t5.app_id=t1.app_id and t2.menu_id=t5.menu_id
+			WHERE
+				t1.isavailable = 1
+			AND t2.isavailable = 1 
+			AND t3.isavailable = 1
+			AND t4.isavailable = 1
+			AND t5.isavailable = 1
+			AND t2.visible = 1
+			AND t3.user_id=#{userId,jdbcType=VARCHAR}
+			ORDER BY
+				t1.app_id,
+				t2.parent_id,
+				t2.sort
+  		</otherwise>
+  	</choose>
+
+  </select>
+  
+  <insert id="insert" parameterType="SysAppVo" >
+    insert into t_sys_app (app_id, app_key, app_name,app_url,app_index,app_icon,sort, 
+       create_by, descr,update_time
+      )
+    values (#{appId,jdbcType=VARCHAR}, #{appKey,jdbcType=VARCHAR}, #{appName,jdbcType=VARCHAR},#{appUrl,jdbcType=VARCHAR},
+    #{appIndex,jdbcType=VARCHAR}, #{appIcon,jdbcType=VARCHAR},
+      <choose>
+      	<when test="sort!=null">
+      		#{sort,jdbcType=INTEGER},
+      	</when>
+      	<otherwise>
+      		( select ifnull((SELECT (max(ifnull(sort, 0)) + 1) from t_sys_app t),0)),
+      	</otherwise>
+      </choose>
+       #{createBy,jdbcType=VARCHAR},  #{descr,jdbcType=VARCHAR},sysdate()
+      )
+  </insert>
+  
+  <update id="update" parameterType="SysAppVo" >
+    update t_sys_app
+    <set >
+      <if test="appKey != null" >
+        app_key = #{appKey,jdbcType=VARCHAR},
+      </if>
+      <if test="appName != null" >
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="appUrl != null" >
+        app_url = #{appUrl,jdbcType=VARCHAR},
+      </if>
+        app_index = #{appIndex,jdbcType=VARCHAR},
+      <if test="appIcon != null" >
+        app_icon = #{appIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate()
+    </set>
+    where app_id = #{appId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

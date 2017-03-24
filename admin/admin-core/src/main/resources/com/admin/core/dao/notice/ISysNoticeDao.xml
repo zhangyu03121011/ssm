@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.notice.ISysNoticeDao" >
+
+  <resultMap id="BaseResultMap" type="SysNoticeVo" >
+    <id column="notice_id" property="noticeId" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="atta_id" property="attaId" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    notice_id, app_id, title,atta_id, isavailable, create_by, create_time, update_by, update_time, 
+    descr,content
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_notice
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getPage" resultMap="BaseResultMap" parameterType="SysNoticeVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_notice
+    where isavailable = 1
+      <if test="appId != null" >
+        and app_id = #{appId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null" >
+        and title like CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="content != null" >
+        and content like CONCAT('%',#{content,jdbcType=LONGVARCHAR},'%')
+      </if>
+      <if test="createBy != null" >
+        and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="beginTime != null" >
+        and create_time >= #{beginTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null" >
+        and create_time &lt;= #{endTime,jdbcType=VARCHAR}
+      </if>
+    order by app_id,create_time
+  </select>
+  
+  <insert id="insert" parameterType="SysNoticeVo" >
+    insert into t_sys_notice (notice_id, app_id,atta_id, title, 
+      create_by, descr, content)
+    values (#{noticeId,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR},#{attaId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="SysNoticeVo" >
+    update t_sys_notice
+    <set >
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="attaId != null" >
+        atta_id = #{attaId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        update_time = sysdate()
+    </set>
+    where notice_id = #{noticeId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

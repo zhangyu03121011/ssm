@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.log.ISysLoginLogDao" >
+
+  <resultMap id="BaseResultMap" type="SysLoginLogVo" >
+    <id column="login_log_id" property="loginLogId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="operation_type" property="operationType" jdbcType="VARCHAR" />
+    <result column="operation_name" property="operationName" jdbcType="VARCHAR" />
+    <result column="ip_address" property="ipAddress" jdbcType="VARCHAR" />
+    <result column="mac_address" property="macAddress" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    login_log_id, user_id, user_name, operation_type, operation_name, ip_address, 
+    mac_address, type, create_by, create_time, descr
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_login_log
+    where login_log_id = #{loginLogId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getPage" resultMap="BaseResultMap" parameterType="SysLoginLogVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_login_log
+    <where>
+      <if test="userName != null" >
+        and user_name like CONCAT('%',#{userName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="operationType != null" >
+        and operation_type = #{operationType,jdbcType=VARCHAR}
+      </if>
+      <if test="operationName != null" >
+        and operation_name like CONCAT('%',#{operationName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="ipAddress != null" >
+        and ip_address like CONCAT('%',#{ipAddress,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="macAddress != null" >
+        and mac_address like CONCAT('%',#{macAddress,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="type != null" >
+        and type = #{type,jdbcType=VARCHAR}
+      </if>
+      <if test="descr != null" >
+        and descr like CONCAT('%',#{descr,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="beginTime != null" >
+        and create_time >= #{beginTime,jdbcType=VARCHAR}
+      </if>
+      <if test="endTime != null" >
+        and create_time &lt;= #{endTime,jdbcType=VARCHAR}
+      </if>
+      </where>
+      order by create_time desc
+  </select>
+
+  <insert id="insert" parameterType="SysLoginLogVo" >
+    insert into t_sys_login_log (login_log_id,  user_id, 
+      user_name, operation_type, operation_name, 
+      ip_address, mac_address, type, 
+      create_by, descr
+      )
+    values (#{loginLogId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{userName,jdbcType=VARCHAR}, #{operationType,jdbcType=VARCHAR}, #{operationName,jdbcType=VARCHAR}, 
+      #{ipAddress,jdbcType=VARCHAR}, #{macAddress,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR}
+      )
+  </insert>
+ 
+</mapper>

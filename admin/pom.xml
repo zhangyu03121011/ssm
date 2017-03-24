@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.admin</groupId>
+	<artifactId>admin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>admin</name>
+	<url>http://maven.apache.org</url>
+
+	<modules>
+
+		<module>admin-api</module>
+		<module>admin-core</module>
+		<module>admin-manager</module>
+
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<junit.version>4.12</junit.version>
+		<!-- admin版本 -->
+		<admin.version>0.0.1-SNAPSHOT</admin.version>
+		<!-- common版本 -->
+		<common.version>0.0.1-SNAPSHOT</common.version>
+		<!-- nexus地址 -->
+		<nexus.content>http://120.76.65.211:8081/nexus/content</nexus.content>
+	</properties>
+
+	<!-- #################################################################### -->
+	<!-- # 部署配置 -->
+	<!-- #################################################################### -->
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Sonatype Nexus Releases</name>
+			<url>${nexus.content}/repositories/releases</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>${nexus.content}/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- admin start -->
+			<dependency>
+				<groupId>com.admin</groupId>
+				<artifactId>admin-api</artifactId>
+				<version>${admin.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.admin</groupId>
+				<artifactId>admin-core</artifactId>
+				<version>${admin.version}</version>
+			</dependency>
+			<!-- admin end -->
+
+			<!-- common start -->
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-base</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-util</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-dao</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-api</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-service</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-config</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-controller</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-datasource</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-task</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-mail</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-ftp</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-mq-active</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-db-mongo</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-orm-mybatis</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-search-elasticsearch</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-rpc-dubbo</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-cache-redis</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-cache-memcache</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.common</groupId>
+				<artifactId>common-cache-ehcache</artifactId>
+				<version>${common.version}</version>
+			</dependency>
+			<!-- common end -->
+
+			<!-- servlet start -->
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>servlet-api</artifactId>
+				<version>2.5</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp</groupId>
+				<artifactId>jsp-api</artifactId>
+				<version>2.1</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>jstl</artifactId>
+				<version>1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet.jsp.jstl</groupId>
+				<artifactId>jstl-api</artifactId>
+				<version>1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>taglibs</groupId>
+				<artifactId>standard</artifactId>
+				<version>1.1.2</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.jms</groupId>
+				<artifactId>jms</artifactId>
+				<version>1.1</version>
+			</dependency>
+			<!-- servlet end -->
+
+			<!-- commons begin -->
+			<dependency>
+				<groupId>commons-logging</groupId>
+				<artifactId>commons-logging</artifactId>
+				<version>1.1.2</version>
+			</dependency>
+			<!-- commons end -->
+
+			<dependency>
+				<groupId>com.cloopen.rest.sdk</groupId>
+				<artifactId>sms</artifactId>
+				<version>1.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>jdk.tools</groupId>
+				<artifactId>jdk.tools</artifactId>
+				<version>1.6</version>
+				<scope>system</scope>
+				<systemPath>${JAVA_HOME}/lib/tools.jar</systemPath>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<!-- junit -->
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<package.environment>dev</package.environment>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<properties>
+				<package.environment>test</package.environment>
+			</properties>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+		</profile>
+		<profile>
+			<id>prd</id>
+			<properties>
+				<package.environment>prd</package.environment>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>dev/**</exclude>
+					<exclude>test/**</exclude>
+					<exclude>prd/**</exclude>
+				</excludes>
+			</resource>
+		</resources>
+
+		<plugins>
+			<!-- 编译插件 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+					<encoding>UTF-8</encoding>
+					<compilerArguments>
+						<verbose />
+						<bootclasspath>${java.home}/lib/rt.jar;${java.home}/lib/jce.jar</bootclasspath>
+					</compilerArguments>
+				</configuration>
+			</plugin>
+			<!-- 要将源码放上去，需要加入这个插件 -->
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.0.1</version>
+				<configuration>
+					<attach>true</attach>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.1.1</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+					<webResources>
+						<resource>
+							<directory>${project.basedir}/src/main/resources/${package.environment}</directory>
+							<targetPath>WEB-INF/classes</targetPath>
+							<filtering>true</filtering>
+						</resource>
+					</webResources>
+					<warSourceExcludes>WEB-INF/classes/${package.environment}</warSourceExcludes>
+				</configuration>
+			</plugin>
+		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav-jackrabbit</artifactId>
+				<version>2.2</version>
+			</extension>
+		</extensions>
+	</build>
+
+</project>

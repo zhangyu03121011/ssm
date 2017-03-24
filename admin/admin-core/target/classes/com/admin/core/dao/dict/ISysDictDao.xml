@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.dict.ISysDictDao" >
+
+  <resultMap id="BaseResultMap" type="SysDictVo" >
+    <id column="dict_id" property="dictId" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    dict_id, app_id, parent_id, name, sort, isavailable, create_by, create_time, update_by, 
+    update_time, descr
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dict
+    where dict_id = #{dictId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysDictVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dict
+    where isavailable = 1
+    and app_id = #{appId,jdbcType=VARCHAR}
+    and parent_id = #{parentId,jdbcType=VARCHAR}
+    and name = #{name,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysDictVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dict
+    where isavailable = 1
+    order by sort
+  </select>
+  
+  <insert id="insert" parameterType="SysDictVo" >
+    insert into t_sys_dict (dict_id, app_id, parent_id, 
+      name, sort, 
+      create_by, descr)
+    values (#{dictId,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, 
+      <choose>
+      	<when test="sort!=null">
+      		#{sort,jdbcType=INTEGER},
+      	</when>
+      	<otherwise>
+      		( select ifnull((SELECT (max(ifnull(sort, 0)) + 1) from t_sys_dict t where t.app_id=#{appId,jdbcType=VARCHAR}),0)),
+      	</otherwise>
+      </choose>
+      #{createBy,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="SysDictVo" >
+    update t_sys_dict
+    <set >
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate()
+    </set>
+    where dict_id = #{dictId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

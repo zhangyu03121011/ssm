@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.function.ISysFunctionDao" >
+
+  <resultMap id="BaseResultMap" type="SysFunctionVo" >
+    <id column="function_id" property="functionId" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="function_name" property="functionName" jdbcType="VARCHAR" />
+    <result column="control_key" property="controlKey" jdbcType="VARCHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    function_id, parent_id, function_name, control_key, isavailable, create_by, 
+    create_time, update_by, update_time, descr
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_function
+    where function_id = #{functionId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysFunctionVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_function
+    where isavailable = 1
+    and parent_id = #{parentId,jdbcType=VARCHAR}
+    and function_name = #{functionName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysFunctionVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_function
+    where isavailable = 1
+    order by parent_id,create_time
+  </select> 
+  
+  <insert id="insert" parameterType="SysFunctionVo" >
+    insert into t_sys_function (function_id, parent_id, 
+      function_name, control_key, 
+      create_by, descr)
+    values (#{functionId,jdbcType=VARCHAR},  #{parentId,jdbcType=VARCHAR}, 
+      #{functionName,jdbcType=VARCHAR}, #{controlKey,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="SysFunctionVo" >
+    update t_sys_function
+    <set >
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="functionName != null" >
+        function_name = #{functionName,jdbcType=VARCHAR},
+      </if>
+      <if test="controlKey != null" >
+        control_key = #{controlKey,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate()
+    </set>
+    where function_id = #{functionId,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

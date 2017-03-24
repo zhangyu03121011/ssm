@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.dept.ISysDeptDao" >
+
+  <resultMap id="BaseResultMap" type="SysDeptVo" >
+    <id column="dept_id" property="deptId" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="dept_name" property="deptName" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    dept_id, parent_id, dept_name, address, isavailable, create_by, create_time, update_by, 
+    update_time, descr
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dept
+    where dept_id = #{deptId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysDeptVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dept
+    where isavailable = 1
+    and	parent_id = #{parentId,jdbcType=VARCHAR}
+    and	dept_name = #{deptName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysDeptVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dept
+    where isavailable = 1
+    order by parent_id,create_time
+  </select> 
+  
+  <insert id="insert" parameterType="SysDeptVo" >
+    insert into t_sys_dept (dept_id, parent_id, dept_name, 
+      address, create_by,  
+      descr)
+    values (#{deptId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, #{deptName,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR},  #{createBy,jdbcType=VARCHAR},  
+      #{descr,jdbcType=VARCHAR})
+  </insert>
+  
+  <update id="update" parameterType="SysDeptVo" >
+    update t_sys_dept
+    <set >
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="deptName != null" >
+        dept_name = #{deptName,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate()
+    </set>
+    where dept_id = #{deptId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>

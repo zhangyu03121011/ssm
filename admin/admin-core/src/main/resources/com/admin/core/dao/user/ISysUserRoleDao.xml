@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.user.ISysUserRoleDao" >
+
+  <resultMap id="BaseResultMap" type="SysUserRoleVo" >
+    <id column="user_role_id" property="userRoleId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    
+	<association property="sysRoleModel" column="role_id" javaType="SysRoleVo">
+	    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+	    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+	    <result column="role_key" property="roleKey" jdbcType="VARCHAR" />
+	    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="descr" property="descr" jdbcType="VARCHAR" />
+	</association>
+	
+	<association property="sysUserModel" column="user_id" javaType="SysUserVo">
+	    <id column="user_id" property="userId" jdbcType="VARCHAR" />
+	    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+	    <result column="password" property="password" jdbcType="VARCHAR" />
+	    <result column="random_code" property="randomCode" jdbcType="VARCHAR" />
+	    <result column="full_name" property="fullName" jdbcType="VARCHAR" />
+	    <result column="sex" property="sex" jdbcType="VARCHAR" />
+	    <result column="birthday" property="birthday" jdbcType="TIMESTAMP" />
+	    <result column="mobile" property="mobile" jdbcType="VARCHAR" />
+	    <result column="phone" property="phone" jdbcType="VARCHAR" />
+	    <result column="qq" property="qq" jdbcType="VARCHAR" />
+	    <result column="email" property="email" jdbcType="VARCHAR" />
+	    <result column="address" property="address" jdbcType="VARCHAR" />
+	    <result column="dept_id" property="deptId" jdbcType="VARCHAR" />
+	    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="descr" property="descr" jdbcType="VARCHAR" />
+	</association>
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    user_role_id, user_id, role_id, isavailable, create_by, create_time
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_user_role
+    where user_role_id = #{userRoleId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysUserRoleVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_user_role
+    where isavailable = 1
+    and user_id = #{userId,jdbcType=VARCHAR}
+    and role_id = #{roleId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysUserRoleVo" >
+    SELECT
+		t1.*, t2.user_name,
+		t2.full_name,
+		t2.dept_id,
+		t3.role_name,
+		t3.role_key
+	FROM
+		t_sys_user_role t1
+	INNER JOIN t_sys_user t2 ON t1.user_id = t2.user_id
+	AND t2.isavailable = 1
+	INNER JOIN t_sys_role t3 ON t1.role_id = t3.role_id
+	AND t3.isavailable = 1
+	WHERE
+		t1.isavailable = 1
+      <if test="userId != null" >
+        and t1.user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="roleId != null" >
+        and t1.role_id = #{roleId,jdbcType=VARCHAR}
+      </if>
+  </select> 
+  
+  <insert id="insert" parameterType="SysUserRoleVo" >
+    insert into t_sys_user_role (user_role_id, user_id, 
+      role_id, create_by)
+    values (#{userRoleId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{roleId,jdbcType=VARCHAR},  #{createBy,jdbcType=VARCHAR})
+  </insert>
+  
+  <delete id="delete" parameterType="SysUserRoleVo" >
+    delete from t_sys_user_role
+    <where>
+    	1=1
+    	<if test="roleId!=null">
+    		and role_id=#{roleId,jdbcType=VARCHAR}
+    	</if>
+    	<if test="userId!=null">
+    		and user_id = #{userId,jdbcType=VARCHAR}
+    	</if>
+    </where>
+  </delete>
+  
+  <update id="update" parameterType="SysUserRoleVo" >
+    update t_sys_user_role
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null" >
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+    </set>
+    where user_role_id = #{userRoleId,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

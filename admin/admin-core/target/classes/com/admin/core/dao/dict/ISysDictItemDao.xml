@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.dict.ISysDictItemDao" >
+
+  <resultMap id="BaseResultMap" type="SysDictItemVo" >
+    <id column="dict_item_id" property="dictItemId" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="dict_id" property="dictId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="value" property="value" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseDictAppResultMap" type="SysDictItemVo" extends="BaseResultMap">
+    
+   	<association property="sysAppModel" column="app_id" javaType="SysAppModel">
+	    <id column="app_id" property="appId" jdbcType="VARCHAR" />
+	    <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+	    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+	    <result column="app_url" property="appUrl" jdbcType="VARCHAR" />
+	    <result column="app_index" property="appIndex" jdbcType="VARCHAR" />
+	    <result column="app_icon" property="appIcon" jdbcType="VARCHAR" />
+	    <result column="sort" property="sort" jdbcType="INTEGER" />
+	    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="descr" property="descr" jdbcType="VARCHAR" />
+	</association>
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    dict_item_id, app_id, dict_id, name, value, sort, isavailable, create_by, create_time, 
+    update_by, update_time, descr
+  </sql>
+
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dict_item
+    where dict_item_id = #{dictItemId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysDictItemVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_dict_item
+    where isavailable = 1
+    and app_id = #{appId,jdbcType=VARCHAR}
+    and dict_id = #{dictId,jdbcType=VARCHAR}
+    and name = #{name,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getPage" resultMap="BaseDictAppResultMap" parameterType="SysDictItemVo" >
+    select 
+    	t1.*,
+    	t2.app_key, t2.app_name,t2.app_url,t2.app_index,t2.app_icon
+    from t_sys_dict_item t1
+    left join t_sys_app t2 
+    on t1.app_id=t2.app_id and t2.isavailable = 1
+    where t1.isavailable = 1
+      <if test="dictId != null" >
+        and (t1.dict_id = #{dictId,jdbcType=VARCHAR}
+        	or
+        	 t1.app_id = #{dictId,jdbcType=VARCHAR}
+        )
+      </if>
+      <if test="appId != null" >
+        and t1.app_id = #{appId,jdbcType=VARCHAR}
+      </if>
+    order by t2.sort,t1.dict_id,t1.sort
+  </select>
+
+  <insert id="insert" parameterType="SysDictItemVo" >
+    insert into t_sys_dict_item (dict_item_id, app_id, dict_id, 
+      name, value, sort, 
+       create_by, descr
+      )
+    values (#{dictItemId,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{dictId,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{value,jdbcType=VARCHAR}, 
+      <choose>
+      	<when test="sort!=null">
+      		#{sort,jdbcType=INTEGER},
+      	</when>
+      	<otherwise>
+      		( select ifnull((SELECT (max(ifnull(sort, 0)) + 1) from t_sys_dict_item t where t.dict_id=#{dictId,jdbcType=VARCHAR}),0)),
+      	</otherwise>
+      </choose>
+       #{createBy,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="update" parameterType="SysDictItemVo" >
+    update t_sys_dict_item
+    <set >
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="dictId != null" >
+        dict_id = #{dictId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="value != null" >
+        value = #{value,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate()
+    </set>
+    where dict_item_id = #{dictItemId,jdbcType=VARCHAR}
+  </update>
+
+</mapper>

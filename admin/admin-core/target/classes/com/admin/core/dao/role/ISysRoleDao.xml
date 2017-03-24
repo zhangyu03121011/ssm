@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.role.ISysRoleDao" >
+
+  <resultMap id="BaseResultMap" type="SysRoleVo" >
+    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="role_key" property="roleKey" jdbcType="VARCHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    role_id, role_name, role_key,isavailable, create_by, create_time, update_by, update_time, 
+    descr
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_role
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysRoleVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_role
+    where isavailable = 1
+    and role_name = #{roleName,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysRoleVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_role
+    where isavailable = 1
+    order by role_name,create_time
+  </select> 
+  
+  <insert id="insert" parameterType="SysRoleVo" >
+    insert into t_sys_role (role_id,  role_name, role_key,
+       create_by, descr
+      )
+    values (#{roleId,jdbcType=VARCHAR},  #{roleName,jdbcType=VARCHAR}, #{roleKey,jdbcType=VARCHAR}, 
+       #{createBy,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <update id="update" parameterType="SysRoleVo" >
+    update t_sys_role
+    <set >
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleKey != null" >
+        role_key = #{roleKey,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate()
+    </set>
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </update>
+ 
+</mapper>

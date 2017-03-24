@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.role.ISysRoleMenuDao" >
+
+  <resultMap id="BaseResultMap" type="SysRoleMenuVo" >
+    <id column="role_menu_id" property="roleMenuId" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    
+	<association property="sysRoleModel" column="role_id" javaType="SysRoleMenuVo">
+	    <id column="role_id" property="roleId" jdbcType="VARCHAR" />
+	    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+	    <result column="role_key" property="roleKey" jdbcType="VARCHAR" />
+	    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="descr" property="descr" jdbcType="VARCHAR" />
+	</association>
+	
+	<association property="sysMenuModel" column="menu_id" javaType="SysRoleMenuVo">
+	    <id column="menu_id" property="menuId" jdbcType="VARCHAR" />
+	    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+	    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+	    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+	    <result column="menu_key" property="menuKey" jdbcType="VARCHAR" />
+	    <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+	    <result column="win_type" property="winType" jdbcType="VARCHAR" />
+	    <result column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+	    <result column="sort" property="sort" jdbcType="INTEGER" />
+	    <result column="visible" property="visible" jdbcType="CHAR" />
+	    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="descr" property="descr" jdbcType="VARCHAR" />
+	</association>
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    role_menu_id,app_id, role_id, menu_id, isavailable, create_by, create_time
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_role_menu
+    where role_menu_id = #{roleMenuId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysRoleMenuVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_role_menu
+    where isavailable = 1
+    and role_id = #{roleId,jdbcType=VARCHAR}
+    and menu_id = #{menuId,jdbcType=VARCHAR}
+  </select>
+  
+  <delete id="delete" parameterType="SysRoleMenuVo" >
+    delete from t_sys_role_menu
+    where role_id = #{roleId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insert" parameterType="SysRoleMenuVo" >
+    insert into t_sys_role_menu (role_menu_id,app_id, role_id, menu_id, 
+       create_by
+      )
+    values (#{roleMenuId,jdbcType=VARCHAR},#{appId,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, #{menuId,jdbcType=VARCHAR}, 
+       #{createBy,jdbcType=VARCHAR}
+      )
+  </insert>
+  
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysRoleMenuVo" >
+    SELECT
+		*
+	FROM
+		t_sys_role_menu t1
+	INNER JOIN t_sys_menu t2 ON t1.menu_id = t2.menu_id
+	AND t2.isavailable = 1
+	INNER JOIN t_sys_role t3 ON t1.role_id = t3.role_id
+	AND t3.isavailable = 1
+	WHERE
+		t1.isavailable = 1
+      <if test="roleId != null" >
+        and t1.role_id = #{roleId,jdbcType=VARCHAR}
+      </if>
+      <if test="menuId != null" >
+        and t1.menu_id = #{menuId,jdbcType=VARCHAR}
+      </if>
+  </select>
+
+</mapper>

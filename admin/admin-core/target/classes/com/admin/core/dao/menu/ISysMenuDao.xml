@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.admin.core.dao.menu.ISysMenuDao" >
+
+  <resultMap id="BaseResultMap" type="SysMenuVo" >
+    <id column="menu_id" property="menuId" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="VARCHAR" />
+    <result column="menu_name" property="menuName" jdbcType="VARCHAR" />
+    <result column="menu_key" property="menuKey" jdbcType="VARCHAR" />
+    <result column="menu_url" property="menuUrl" jdbcType="VARCHAR" />
+    <result column="win_type" property="winType" jdbcType="VARCHAR" />
+    <result column="menu_icon" property="menuIcon" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="visible" property="visible" jdbcType="CHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <resultMap id="BaseMenuAppResultMap" type="SysMenuVo" extends="BaseResultMap">
+    
+   	<association property="sysAppModel" column="app_id" javaType="SysAppModel">
+	    <id column="app_id" property="appId" jdbcType="VARCHAR" />
+	    <result column="app_key" property="appKey" jdbcType="VARCHAR" />
+	    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+	    <result column="app_url" property="appUrl" jdbcType="VARCHAR" />
+	    <result column="app_index" property="appIndex" jdbcType="VARCHAR" />
+	    <result column="app_icon" property="appIcon" jdbcType="VARCHAR" />
+	    <result column="sort" property="sort" jdbcType="INTEGER" />
+	    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+	    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+	    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+	    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+	    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	    <result column="descr" property="descr" jdbcType="VARCHAR" />
+	</association>
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    menu_id, app_id, parent_id, menu_name,menu_key, menu_url, win_type, menu_icon, sort, visible, 
+    isavailable, create_by, create_time, update_by, update_time, descr
+  </sql>
+  
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_menu
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOne" resultMap="BaseResultMap" parameterType="SysMenuVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_menu
+    where isavailable = 1
+    and app_id = #{appId,jdbcType=VARCHAR}
+    and parent_id = #{parentId,jdbcType=VARCHAR}
+    and menu_name = #{menuName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getAll" resultMap="BaseResultMap" parameterType="SysMenuVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sys_menu
+    where isavailable = 1
+    order by sort
+  </select>  
+  
+  <select id="getPage" resultMap="BaseMenuAppResultMap" parameterType="SysMenuVo" >
+    select 
+    	t1.*,
+    	t2.app_key, t2.app_name,t2.app_url,t2.app_index,t2.app_icon
+    from t_sys_menu t1
+    inner join t_sys_app t2 
+    on t1.app_id=t2.app_id
+    where t1.isavailable = 1
+    	and t2.isavailable = 1
+      <if test="appId != null" >
+        and t1.app_id = #{appId,jdbcType=VARCHAR}
+      </if>
+      <if test="parentId != null" >
+       	and (
+       		t1.parent_id = #{parentId,jdbcType=VARCHAR}
+       	or 
+       		t1.menu_id = #{parentId,jdbcType=VARCHAR}
+       	)
+      </if>
+      <if test="menuName != null" >
+        and t1.menu_name = #{menuName,jdbcType=VARCHAR}
+      </if>
+      <if test="menuKey != null" >
+        and t1.menu_key = #{menuKey,jdbcType=VARCHAR}
+      </if>
+      <if test="winType != null" >
+        and t1.win_type = #{winType,jdbcType=VARCHAR}
+      </if>
+      <if test="visible != null" >
+        and t1.visible = #{visible,jdbcType=CHAR}
+      </if>
+      <if test="descr != null" >
+        and t1.descr = #{descr,jdbcType=VARCHAR}
+      </if>
+    order by t2.sort,t1.app_id,t1.parent_id,t1.sort
+  </select>
+ 
+  <insert id="insert" parameterType="SysMenuVo" >
+    insert into t_sys_menu (menu_id, app_id, parent_id, 
+      menu_name,menu_key, menu_url, win_type, 
+      menu_icon, sort, visible, 
+       create_by, descr
+      )
+    values (#{menuId,jdbcType=VARCHAR}, #{appId,jdbcType=VARCHAR}, #{parentId,jdbcType=VARCHAR}, 
+      #{menuName,jdbcType=VARCHAR},#{menuKey,jdbcType=VARCHAR}, #{menuUrl,jdbcType=VARCHAR}, #{winType,jdbcType=VARCHAR}, 
+      #{menuIcon,jdbcType=VARCHAR}, 
+      <choose>
+      	<when test="sort!=null">
+      		#{sort,jdbcType=INTEGER},
+      	</when>
+      	<otherwise>
+      		( select ifnull((SELECT (max(ifnull(sort, 0)) + 1) from t_sys_menu t where t.parent_id=#{parentId,jdbcType=VARCHAR}),0)),
+      	</otherwise>
+      </choose>
+       #{visible,jdbcType=CHAR}, 
+       #{createBy,jdbcType=VARCHAR}, #{descr,jdbcType=VARCHAR}
+      )
+  </insert>
+ 
+  <update id="update" parameterType="SysMenuVo" >
+    update t_sys_menu
+    <set >
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuKey != null" >
+        menu_key = #{menuKey,jdbcType=VARCHAR},
+      </if>
+      <if test="menuUrl != null" >
+        menu_url = #{menuUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="winType != null" >
+        win_type = #{winType,jdbcType=VARCHAR},
+      </if>
+      <if test="menuIcon != null" >
+        menu_icon = #{menuIcon,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="visible != null" >
+        visible = #{visible,jdbcType=CHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate()
+    </set>
+    where menu_id = #{menuId,jdbcType=VARCHAR}
+  </update>
+  
+</mapper>
