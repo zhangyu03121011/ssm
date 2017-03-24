@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/jee  http://www.springframework.org/schema/jee/spring-jee-4.2.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd"
+	default-lazy-init="true">
+	
+   	<!-- ftpService -->
+	<bean id="ftpService" class="com.common.ftp.service.impl.FtpServiceImpl">
+		<property name="host" value="${ftp.host}"/>
+		<property name="port" value="${ftp.port}" />
+		<property name="username" value="${ftp.username}" />
+		<property name="password" value="${ftp.password}" />
+		<property name="binaryTransfer" value="${ftp.binary_transfer}" />
+		<property name="passiveMode" value="${ftp.passive_mode}" />
+		<property name="encoding" value="${ftp.encoding}" />
+		<property name="clientTimeout" value="${ftp.timeout}" />
+	</bean>
+	
+</beans>

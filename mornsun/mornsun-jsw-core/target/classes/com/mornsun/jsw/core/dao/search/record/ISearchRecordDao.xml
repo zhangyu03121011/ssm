@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mornsun.jsw.core.dao.search.record.ISearchRecordDao">
+
+  <resultMap id="BaseResultMap" type="SearchRecordVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="keyword" jdbcType="VARCHAR" property="keyword" />
+    <result column="result_count" jdbcType="INTEGER" property="ResultCount" />
+    <result column="isavailable" jdbcType="CHAR" property="isavailable" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, result_count, keyword, isavailable, create_by, create_time,descr
+  </sql>
+
+<select id="getAll" parameterType="SearchRecordVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_search_record
+	<where>
+	1=1
+      <if test="keyword != null">
+	and keyword = #{keyword,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" parameterType="SearchRecordVo" resultMap="BaseResultMap">
+	<choose>
+		<when test="flag==true">
+			SELECT 
+				keyword,count(1) as searchCount 
+			FROM t_mornsun_search_record 
+			where isavailable=1 GROUP BY keyword ORDER BY searchCount desc
+		</when>
+		<otherwise>
+			select 
+		    <include refid="Base_Column_List" />
+		    from t_mornsun_search_record
+			<where>
+			1=1
+		      <if test="keyword != null">
+			and keyword = #{keyword,jdbcType=VARCHAR}
+		      </if>
+		      <if test="isavailable != null">
+			and isavailable = #{isavailable,jdbcType=CHAR}
+		      </if>
+		      <if test="descr != null">
+			and descr = #{descr,jdbcType=VARCHAR}
+	      	</if>
+			</where>
+		</otherwise>
+	</choose>
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_search_record
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insert" parameterType="SearchRecordVo">
+    insert into t_mornsun_search_record (id, result_count,
+      keyword,  create_by, 
+      create_time,   
+      descr)
+    values (#{id,jdbcType=VARCHAR}, #{resultCount,jdbcType=INTEGER},  
+      #{keyword,jdbcType=VARCHAR},#{createBy,jdbcType=VARCHAR},  
+      sysdate(),  
+      #{descr,jdbcType=VARCHAR})
+  </insert>
+
+</mapper>

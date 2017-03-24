@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mornsun.jsw.core.dao.user.deal.IUserDealDao" >
+ 
+<select id="getPage" resultType="UserDealVo" parameterType="UserDealVo" >
+	SELECT * from (
+	SELECT
+		t1.id,
+		t1.source_type AS payType,
+		NULL AS playTypeName,
+		t1.pay_money AS money,
+		t1.create_time AS playTime
+	FROM
+		t_mornsun_user_pay t1
+	WHERE
+		t1.isavailable = 1
+	AND t1.state = 1
+	UNION ALL
+		SELECT
+			t1.id,
+			t2.coupon_type AS payType,
+			t2.coupon_name AS playTypeName,
+			t2.coupon_money AS money,
+			t1.create_time AS playTime
+		FROM
+			t_mornsun_user_coupon t1
+		INNER JOIN t_mornsun_coupon t2 ON t1.coupon_id = t2.id
+		AND t1.isavailable = 1) t1 order by t1.playTime desc
+ </select>
+
+</mapper>

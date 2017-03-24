@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mornsun.jsw.core.dao.user.expert.IUserExpertDao">
+
+  <resultMap id="BaseResultMap" type="UserExpertVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="industry" jdbcType="VARCHAR" property="industry" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="position_id" jdbcType="VARCHAR" property="positionId" />
+    <result column="expert_money" jdbcType="DOUBLE" property="expertMoney" />
+    <result column="answer_count" jdbcType="INTEGER" property="answerCount" />
+    <result column="income_money" jdbcType="DOUBLE" property="incomeMoney" />
+    <result column="state" jdbcType="CHAR" property="state" />
+    <result column="isavailable" jdbcType="CHAR" property="isavailable" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    
+    <association property="userVo" column="user_id" javaType="UserVo">
+	    <id column="user_id" jdbcType="VARCHAR" property="id" />
+	    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="user_alias" jdbcType="VARCHAR" property="userAlias" />
+	    <result column="head_image" jdbcType="VARCHAR" property="headImage" />
+	    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+	    <result column="user_position_id" jdbcType="VARCHAR" property="positionId" />
+	    <result column="random_code" jdbcType="VARCHAR" property="randomCode" />
+	    <result column="user_money" jdbcType="DOUBLE" property="userMoney" />
+	    <result column="user_coupon" jdbcType="DOUBLE" property="userCoupon" />
+	    <result column="user_type" jdbcType="CHAR" property="userType" />
+	    <result column="intro" jdbcType="VARCHAR" property="intro" />
+	    <result column="auth_id" jdbcType="VARCHAR" property="authId" />
+	    <result column="auth_type" jdbcType="CHAR" property="authType" />
+	    <result column="is_push_message" jdbcType="CHAR" property="isPushMessage" />
+	</association>
+	
+    <association property="positionVo" column="position_id" javaType="PositionVo">
+	    <id column="position_id" jdbcType="VARCHAR" property="id" />
+	    <result column="position_name" jdbcType="VARCHAR" property="positionName" />
+	</association>
+	
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, user_id, name, city, industry, company, position_id, expert_money, answer_count, 
+    income_money, state, isavailable, create_by, create_time, update_by, update_time, 
+    descr
+  </sql>
+
+  <select id="selectByExample" parameterType="UserExpertModelCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_expert
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" parameterType="UserExpertVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_expert
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+	and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="city != null">
+	and city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="industry != null">
+	and industry = #{industry,jdbcType=VARCHAR}
+      </if>
+      <if test="company != null">
+	and company = #{company,jdbcType=VARCHAR}
+      </if>
+      <if test="positionId != null">
+	and position_id = #{positionId,jdbcType=VARCHAR}
+      </if>
+      <if test="expertMoney != null">
+	and expert_money = #{expertMoney,jdbcType=DOUBLE}
+      </if>
+      <if test="answerCount != null">
+	and answer_count = #{answerCount,jdbcType=INTEGER}
+      </if>
+      <if test="incomeMoney != null">
+	and income_money = #{incomeMoney,jdbcType=DOUBLE}
+      </if>
+      <if test="state != null">
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" parameterType="UserExpertVo" resultMap="BaseResultMap">
+    select 
+    	   distinct t1.id, t1.user_id, t1.name, t1.city, t1.industry, t1.company, t1.position_id, t1.expert_money, t1.answer_count, 
+    		t1.income_money, t1.state, t1.isavailable, t1.create_by, t1.create_time, t1.update_by, t1.update_time, t1.descr,
+    		t2.user_name, t2.user_alias, t2.head_image, t2.mobile, t2.position_id as user_position_id, t2.random_code, 
+    		t2.user_money, t2.user_coupon, t2.user_type, t2.intro, t2.auth_id, t2.auth_type, t2.is_push_message,
+    		t4.position_name
+    from t_mornsun_user_expert t1
+    inner join t_mornsun_user t2 on t1.user_id=t2.id
+    inner join t_mornsun_user_catalog t3 on t1.user_id=t3.user_id and t3.type=2
+    left join t_mornsun_position t4 on t1.position_id=t4.id
+	<where>
+	1=1
+      <if test="keyword != null">
+      and (
+      	t2.user_alias like CONCAT('%',trim(#{keyword,jdbcType=VARCHAR}),'%')
+      )
+      </if>
+      <if test="catalogId != null">
+	and t3.catalog_id = #{catalogId,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null">
+	and t1.user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+	and t1.name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="company != null">
+	and t1.company = #{company,jdbcType=VARCHAR}
+      </if>
+      <if test="positionId != null">
+	and t1.position_id = #{positionId,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+	and t1.state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    	   distinct t1.id, t1.user_id, t1.name, t1.city, t1.industry, t1.company, t1.position_id, t1.expert_money, t1.answer_count, 
+    		t1.income_money, t1.state, t1.isavailable, t1.create_by, t1.create_time, t1.update_by, t1.update_time, t1.descr,
+    		t2.user_name, t2.user_alias, t2.head_image, t2.mobile, t2.position_id as user_position_id, t2.random_code, 
+    		t2.user_money, t2.user_coupon, t2.user_type, t2.intro, t2.auth_id, t2.auth_type, t2.is_push_message,
+    		t4.position_name
+    from t_mornsun_user_expert t1
+    inner join t_mornsun_user t2 on t1.user_id=t2.id
+    left join t_mornsun_user_catalog t3 on t1.user_id=t3.user_id and t3.type=2
+    left join t_mornsun_position t4 on t1.position_id=t4.id
+    where t1.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" parameterType="UserExpertVo" resultMap="BaseResultMap">
+    select 
+    	   distinct t1.id, t1.user_id, t1.name, t1.city, t1.industry, t1.company, t1.position_id, t1.expert_money, t1.answer_count, 
+    		t1.income_money, t1.state, t1.isavailable, t1.create_by, t1.create_time, t1.update_by, t1.update_time, t1.descr,
+    		t2.user_name, t2.user_alias, t2.head_image, t2.mobile, t2.position_id as user_position_id, t2.random_code, 
+    		t2.user_money, t2.user_coupon, t2.user_type, t2.intro, t2.auth_id, t2.auth_type, t2.is_push_message,
+    		t4.position_name
+    from t_mornsun_user_expert t1
+    inner join t_mornsun_user t2 on t1.user_id=t2.id
+    left join t_mornsun_user_catalog t3 on t1.user_id=t3.user_id and t3.type=2
+    left join t_mornsun_position t4 on t1.position_id=t4.id
+	<where>
+	1=1
+      <if test="userId != null">
+	and t1.user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+	and t1.name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="company != null">
+	and t1.company = #{company,jdbcType=VARCHAR}
+      </if>
+      <if test="positionId != null">
+	and t1.position_id = #{positionId,jdbcType=VARCHAR}
+      </if>
+      <if test="state != null">
+	and t1.state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from t_mornsun_user_expert
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="UserExpertModelCriteria">
+    delete from t_mornsun_user_expert
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="UserExpertVo">
+    delete from t_mornsun_user_expert
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+	and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="city != null">
+	and city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="industry != null">
+	and industry = #{industry,jdbcType=VARCHAR}
+      </if>
+      <if test="company != null">
+	and company = #{company,jdbcType=VARCHAR}
+      </if>
+      <if test="positionId != null">
+	and position_id = #{positionId,jdbcType=VARCHAR}
+      </if>
+      <if test="expertMoney != null">
+	and expert_money = #{expertMoney,jdbcType=DOUBLE}
+      </if>
+      <if test="answerCount != null">
+	and answer_count = #{answerCount,jdbcType=INTEGER}
+      </if>
+      <if test="incomeMoney != null">
+	and income_money = #{incomeMoney,jdbcType=DOUBLE}
+      </if>
+      <if test="state != null">
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="UserExpertVo">
+    insert into t_mornsun_user_expert (id, user_id, name, 
+      city, industry, company, 
+      position_id, expert_money, answer_count, 
+      income_money, state,  
+      create_by, create_time,  
+       descr)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{industry,jdbcType=VARCHAR}, #{company,jdbcType=VARCHAR}, 
+      #{positionId,jdbcType=VARCHAR}, #{expertMoney,jdbcType=DOUBLE}, #{answerCount,jdbcType=INTEGER}, 
+      #{incomeMoney,jdbcType=DOUBLE}, #{state,jdbcType=CHAR},  
+      #{createBy,jdbcType=VARCHAR}, sysdate(),  
+       #{descr,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="UserExpertVo">
+    insert into t_mornsun_user_expert
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="industry != null">
+        industry,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="positionId != null">
+        position_id,
+      </if>
+      <if test="expertMoney != null">
+        expert_money,
+      </if>
+      <if test="answerCount != null">
+        answer_count,
+      </if>
+      <if test="incomeMoney != null">
+        income_money,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null">
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="expertMoney != null">
+        #{expertMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="answerCount != null">
+        #{answerCount,jdbcType=INTEGER},
+      </if>
+      <if test="incomeMoney != null">
+        #{incomeMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        sysdate(),
+      </if>
+      <if test="descr != null">
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="UserExpertModelCriteria" resultType="java.lang.Long">
+    select count(*) from t_mornsun_user_expert
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="UserExpertVo" resultType="java.lang.Long">
+    select count(*) from t_mornsun_user_expert
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="name != null">
+	and name = #{name,jdbcType=VARCHAR}
+      </if>
+      <if test="city != null">
+	and city = #{city,jdbcType=VARCHAR}
+      </if>
+      <if test="industry != null">
+	and industry = #{industry,jdbcType=VARCHAR}
+      </if>
+      <if test="company != null">
+	and company = #{company,jdbcType=VARCHAR}
+      </if>
+      <if test="positionId != null">
+	and position_id = #{positionId,jdbcType=VARCHAR}
+      </if>
+      <if test="expertMoney != null">
+	and expert_money = #{expertMoney,jdbcType=DOUBLE}
+      </if>
+      <if test="answerCount != null">
+	and answer_count = #{answerCount,jdbcType=INTEGER}
+      </if>
+      <if test="incomeMoney != null">
+	and income_money = #{incomeMoney,jdbcType=DOUBLE}
+      </if>
+      <if test="state != null">
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_mornsun_user_expert
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.industry != null">
+        industry = #{record.industry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.company != null">
+        company = #{record.company,jdbcType=VARCHAR},
+      </if>
+      <if test="record.positionId != null">
+        position_id = #{record.positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.expertMoney != null">
+        expert_money = #{record.expertMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="record.answerCount != null">
+        answer_count = #{record.answerCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.incomeMoney != null">
+        income_money = #{record.incomeMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.isavailable != null">
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null">
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update t_mornsun_user_expert
+    set id = #{record.id,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      industry = #{record.industry,jdbcType=VARCHAR},
+      company = #{record.company,jdbcType=VARCHAR},
+      position_id = #{record.positionId,jdbcType=VARCHAR},
+      expert_money = #{record.expertMoney,jdbcType=DOUBLE},
+      answer_count = #{record.answerCount,jdbcType=INTEGER},
+      income_money = #{record.incomeMoney,jdbcType=DOUBLE},
+      state = #{record.state,jdbcType=CHAR},
+      isavailable = #{record.isavailable,jdbcType=CHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="UserExpertVo">
+    update t_mornsun_user_expert
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="industry != null">
+        industry = #{industry,jdbcType=VARCHAR},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null">
+        position_id = #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="expertMoney != null">
+        expert_money = #{expertMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="answerCount != null">
+        answer_count = #{answerCount,jdbcType=INTEGER},
+      </if>
+      <if test="incomeMoney != null">
+        income_money = #{incomeMoney,jdbcType=DOUBLE},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="isavailable != null">
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="descr != null">
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="UserExpertVo">
+    update t_mornsun_user_expert
+    set user_id = #{userId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      industry = #{industry,jdbcType=VARCHAR},
+      company = #{company,jdbcType=VARCHAR},
+      position_id = #{positionId,jdbcType=VARCHAR},
+      expert_money = #{expertMoney,jdbcType=DOUBLE},
+      answer_count = #{answerCount,jdbcType=INTEGER},
+      income_money = #{incomeMoney,jdbcType=DOUBLE},
+      state = #{state,jdbcType=CHAR},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

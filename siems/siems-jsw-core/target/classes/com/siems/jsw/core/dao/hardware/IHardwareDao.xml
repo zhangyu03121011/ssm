@@ -1,0 +1,570 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siems.jsw.core.dao.hardware.IHardwareDao">
+
+  <resultMap id="BaseResultMap" type="HardwareVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="hardware_no" jdbcType="VARCHAR" property="hardwareNo" />
+    <result column="hardware_name" jdbcType="VARCHAR" property="hardwareName" />
+    <result column="type" jdbcType="CHAR" property="type" />
+    <result column="hardware_model" jdbcType="VARCHAR" property="hardwareModel" />
+    <result column="hardware_vendor" jdbcType="VARCHAR" property="hardwareVendor" />
+    <result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+    <result column="shop_id" jdbcType="VARCHAR" property="shopId" />
+    <result column="isavailable" jdbcType="CHAR" property="isavailable" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, hardware_no, hardware_name, type, hardware_model, hardware_vendor, customer_id, 
+    shop_id, isavailable, create_by, create_time, update_by, update_time, descr
+  </sql>
+
+  <select id="selectByExample" parameterType="HardwareModelCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_buyself_hardware
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" parameterType="HardwareVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_hardware
+	<where>
+	1=1
+      <if test="hardwareNo != null">
+	and hardware_no = #{hardwareNo,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareName != null">
+	and hardware_name = #{hardwareName,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+	and type = #{type,jdbcType=CHAR}
+      </if>
+      <if test="hardwareModel != null">
+	and hardware_model = #{hardwareModel,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareVendor != null">
+	and hardware_vendor = #{hardwareVendor,jdbcType=VARCHAR}
+      </if>
+      <if test="customerId != null">
+	and customer_id = #{customerId,jdbcType=VARCHAR}
+      </if>
+      <if test="shopId != null">
+	and shop_id = #{shopId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" parameterType="HardwareVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_hardware
+	<where>
+	1=1
+      <if test="hardwareNo != null">
+	and hardware_no = #{hardwareNo,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareName != null">
+	and hardware_name = #{hardwareName,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+	and type = #{type,jdbcType=CHAR}
+      </if>
+      <if test="hardwareModel != null">
+	and hardware_model = #{hardwareModel,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareVendor != null">
+	and hardware_vendor = #{hardwareVendor,jdbcType=VARCHAR}
+      </if>
+      <if test="customerId != null">
+	and customer_id = #{customerId,jdbcType=VARCHAR}
+      </if>
+      <if test="shopId != null">
+	and shop_id = #{shopId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_hardware
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" parameterType="HardwareVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_hardware
+	<where>
+	1=1
+      <if test="hardwareNo != null">
+	and hardware_no = #{hardwareNo,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareName != null">
+	and hardware_name = #{hardwareName,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+	and type = #{type,jdbcType=CHAR}
+      </if>
+      <if test="hardwareModel != null">
+	and hardware_model = #{hardwareModel,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareVendor != null">
+	and hardware_vendor = #{hardwareVendor,jdbcType=VARCHAR}
+      </if>
+      <if test="customerId != null">
+	and customer_id = #{customerId,jdbcType=VARCHAR}
+      </if>
+      <if test="shopId != null">
+	and shop_id = #{shopId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from t_buyself_hardware
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="HardwareModelCriteria">
+    delete from t_buyself_hardware
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="HardwareVo">
+    delete from t_buyself_hardware
+	<where>
+	1=1
+      <if test="hardwareNo != null">
+	and hardware_no = #{hardwareNo,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareName != null">
+	and hardware_name = #{hardwareName,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+	and type = #{type,jdbcType=CHAR}
+      </if>
+      <if test="hardwareModel != null">
+	and hardware_model = #{hardwareModel,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareVendor != null">
+	and hardware_vendor = #{hardwareVendor,jdbcType=VARCHAR}
+      </if>
+      <if test="customerId != null">
+	and customer_id = #{customerId,jdbcType=VARCHAR}
+      </if>
+      <if test="shopId != null">
+	and shop_id = #{shopId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="HardwareVo">
+    insert into t_buyself_hardware (id, hardware_no, hardware_name, 
+      type, hardware_model, hardware_vendor, 
+      customer_id, shop_id,  
+      create_by, create_time,  
+       descr)
+    values (#{id,jdbcType=VARCHAR}, #{hardwareNo,jdbcType=VARCHAR}, #{hardwareName,jdbcType=VARCHAR}, 
+      #{type,jdbcType=CHAR}, #{hardwareModel,jdbcType=VARCHAR}, #{hardwareVendor,jdbcType=VARCHAR}, 
+      #{customerId,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR},  
+      #{createBy,jdbcType=VARCHAR}, sysdate(),  
+       #{descr,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="HardwareVo">
+    insert into t_buyself_hardware
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="hardwareNo != null">
+        hardware_no,
+      </if>
+      <if test="hardwareName != null">
+        hardware_name,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="hardwareModel != null">
+        hardware_model,
+      </if>
+      <if test="hardwareVendor != null">
+        hardware_vendor,
+      </if>
+      <if test="customerId != null">
+        customer_id,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareNo != null">
+        #{hardwareNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareName != null">
+        #{hardwareName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="hardwareModel != null">
+        #{hardwareModel,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareVendor != null">
+        #{hardwareVendor,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        sysdate(),
+      </if>
+      <if test="descr != null">
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="HardwareModelCriteria" resultType="java.lang.Long">
+    select count(*) from t_buyself_hardware
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="HardwareVo" resultType="java.lang.Long">
+    select count(*) from t_buyself_hardware
+	<where>
+	1=1
+      <if test="hardwareNo != null">
+	and hardware_no = #{hardwareNo,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareName != null">
+	and hardware_name = #{hardwareName,jdbcType=VARCHAR}
+      </if>
+      <if test="type != null">
+	and type = #{type,jdbcType=CHAR}
+      </if>
+      <if test="hardwareModel != null">
+	and hardware_model = #{hardwareModel,jdbcType=VARCHAR}
+      </if>
+      <if test="hardwareVendor != null">
+	and hardware_vendor = #{hardwareVendor,jdbcType=VARCHAR}
+      </if>
+      <if test="customerId != null">
+	and customer_id = #{customerId,jdbcType=VARCHAR}
+      </if>
+      <if test="shopId != null">
+	and shop_id = #{shopId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_buyself_hardware
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hardwareNo != null">
+        hardware_no = #{record.hardwareNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hardwareName != null">
+        hardware_name = #{record.hardwareName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=CHAR},
+      </if>
+      <if test="record.hardwareModel != null">
+        hardware_model = #{record.hardwareModel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hardwareVendor != null">
+        hardware_vendor = #{record.hardwareVendor,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerId != null">
+        customer_id = #{record.customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopId != null">
+        shop_id = #{record.shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isavailable != null">
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null">
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update t_buyself_hardware
+    set id = #{record.id,jdbcType=VARCHAR},
+      hardware_no = #{record.hardwareNo,jdbcType=VARCHAR},
+      hardware_name = #{record.hardwareName,jdbcType=VARCHAR},
+      type = #{record.type,jdbcType=CHAR},
+      hardware_model = #{record.hardwareModel,jdbcType=VARCHAR},
+      hardware_vendor = #{record.hardwareVendor,jdbcType=VARCHAR},
+      customer_id = #{record.customerId,jdbcType=VARCHAR},
+      shop_id = #{record.shopId,jdbcType=VARCHAR},
+      isavailable = #{record.isavailable,jdbcType=CHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="HardwareVo">
+    update t_buyself_hardware
+    <set>
+      <if test="hardwareNo != null">
+        hardware_no = #{hardwareNo,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareName != null">
+        hardware_name = #{hardwareName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="hardwareModel != null">
+        hardware_model = #{hardwareModel,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareVendor != null">
+        hardware_vendor = #{hardwareVendor,jdbcType=VARCHAR},
+      </if>
+      <if test="customerId != null">
+        customer_id = #{customerId,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null">
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="descr != null">
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="HardwareVo">
+    update t_buyself_hardware
+    set hardware_no = #{hardwareNo,jdbcType=VARCHAR},
+      hardware_name = #{hardwareName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      hardware_model = #{hardwareModel,jdbcType=VARCHAR},
+      hardware_vendor = #{hardwareVendor,jdbcType=VARCHAR},
+      customer_id = #{customerId,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=VARCHAR},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

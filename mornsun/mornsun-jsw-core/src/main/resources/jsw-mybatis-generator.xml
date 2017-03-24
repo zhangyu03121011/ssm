@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<!-- 引入配置文件 -->
+	<properties resource="jsw-mybatis-generator.properties"/>
+	<!-- 指定数据连接驱动jar地址 -->
+	<classPathEntry location="${generator.classPath}" />
+	<!-- 一个数据库一个context -->
+	<context id="BuildingTables" targetRuntime="Mybatis3">
+		<!-- defaultModelType="hierarchical" -->
+		<property name="javaFileEncoding" value="UTF-8" />
+		<property name="suppressTypeWarnings" value="true" />
+
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<plugin type="org.mybatis.generator.plugins.CaseInsensitiveLikePlugin" />
+		<!-- 这里引入扩展插件 -->   
+<!-- 		<plugin type="org.mybatis.generator.plugins.RowBoundsPlugin" /> -->
+<!-- 		<plugin type="org.mybatis.generator.plugins.ToStringPlugin" /> -->
+<!-- 		<plugin type="org.mybatis.generator.plugins.CachePlugin" /> -->
+<!-- 		<plugin type="org.mybatis.generator.plugins.MapperConfigPlugin"> -->
+<!-- 			<property name="fileName" value="${generator.mapperConfigFilename}" /> -->
+<!-- 			<property name="targetPackage" value="${generator.mapperPackage}" /> -->
+<!-- 			<property name="targetProject" -->
+<!-- 				value="${generator.xml.targetProject}/src/main/resources" /> -->
+<!-- 		</plugin> -->
+		<plugin type="org.mybatis.generator.plugins.RenameExampleClassPlugin">
+			<property name="searchString" value="Example$" />
+			<property name="replaceString" value="Criteria" />
+		</plugin>
+
+		<!-- 注释 -->
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" /><!-- 是否取消注释 -->
+			<property name="suppressDate" value="true" /> <!-- 是否生成注释代时间戳 -->
+		</commentGenerator>
+
+		<!-- jdbc连接 -->
+		<jdbcConnection driverClass="${jdbc.driverClassName}"
+			connectionURL="${jdbc.url}" userId="${jdbc.username}" password="${jdbc.password}" />
+			
+		<!-- 类型转换 -->
+		<javaTypeResolver>
+			<!-- 是否使用bigDecimal， false可自动转化以下类型（Long, Integer, Short, etc.） -->
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+		
+		<!-- 生成实体类地址 -->
+		<javaModelGenerator targetPackage="${generator.domainPackage}"
+			targetProject="${generator.bean.targetProject}/src/main/java">
+			<!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
+			<property name="enableSubPackages" value="true" />
+			<!-- 是否针对string类型的字段在set的时候进行trim调用 -->
+			<property name="trimStrings" value="true" />
+			<property name="rootClass" value="BaseModel"/>
+		</javaModelGenerator>
+
+		<!-- 生成mapxml文件 -->
+		<sqlMapGenerator targetPackage="${generator.mapperPackage}"
+			targetProject="${generator.xml.targetProject}/src/main/resources">
+			<!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
+			<property name="enableSubPackages" value="true" />
+		</sqlMapGenerator>
+
+		<!-- 生成mapxml对应client，也就是接口dao -->
+		<javaClientGenerator targetPackage="${generator.daoPackage}"
+			targetProject="${generator.dao.targetProject}/src/main/java" type="XMLMAPPER">
+			<!-- 是否在当前路径下新加一层schema,eg：fase路径com.oop.eksp.user.model， true:com.oop.eksp.user.model.[schemaName] -->
+			<property name="enableSubPackages" value="true" />
+			<property name="rootInterface" value="IBaseDao"/>
+		</javaClientGenerator>
+		
+		<!--
+	    	schema：数据库的schema；
+	        catalog：数据库的catalog；
+	        alias：为数据表设置的别名，如果设置了alias，那么生成的所有的SELECT SQL语句中，列名会变成：alias_actualColumnName
+	        domainObjectName：生成的domain类的名字，如果不设置，直接使用表名作为domain类的名字；可以设置为somepck.domainName，那么会自动把domainName类再放到somepck包里面；
+	        enableInsert（默认true）：指定是否生成insert语句；
+	        enableSelectByPrimaryKey（默认true）：指定是否生成按照主键查询对象的语句（就是getById或get）；
+	        enableSelectByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询语句；
+	        enableUpdateByPrimaryKey（默认true）：指定是否生成按照主键修改对象的语句（即update)；
+	        enableDeleteByPrimaryKey（默认true）：指定是否生成按照主键删除对象的语句（即delete）；
+	        enableDeleteByExample（默认true）：MyBatis3Simple为false，指定是否生成动态删除语句；
+	        enableCountByExample（默认true）：MyBatis3Simple为false，指定是否生成动态查询总条数语句（用于分页的总条数查询）；
+	        enableUpdateByExample（默认true）：MyBatis3Simple为false，指定是否生成动态修改语句（只修改对象中不为空的属性）；
+	        modelType：参考context元素的defaultModelType，相当于覆盖；
+	        delimitIdentifiers：参考tableName的解释，注意，默认的delimitIdentifiers是双引号，如果类似MYSQL这样的数据库，使用的是`（反引号，那么还需要设置context的beginningDelimiter和endingDelimiter属性）
+	        delimitAllColumns：设置是否所有生成的SQL中的列名都使用标识符引起来。默认为false，delimitIdentifiers参考context的属性
+     	-->
+		<!-- 配置表信息 -->
+		<table schema="mornsun" tableName="t_mornsun_apply_area" domainObjectName="applyAreaModel"/>
+		<table schema="mornsun" tableName="t_mornsun_atta" domainObjectName="attaModel"/>
+		<table schema="mornsun" tableName="t_mornsun_tag" domainObjectName="tagModel"/>
+		<table schema="mornsun" tableName="t_mornsun_brand" domainObjectName="brandModel"/>
+		<table schema="mornsun" tableName="t_mornsun_catalog" domainObjectName="catalogModel"/>
+		<table schema="mornsun" tableName="t_mornsun_coupon" domainObjectName="couponModel"/>
+		<table schema="mornsun" tableName="t_mornsun_position" domainObjectName="positionModel"/>
+		<table schema="mornsun" tableName="t_mornsun_product" domainObjectName="productModel"/>
+		<table schema="mornsun" tableName="t_mornsun_product_apply_area" domainObjectName="productApplyAreaModel"/>
+		<table schema="mornsun" tableName="t_mornsun_product_atta" domainObjectName="productAttaModel"/>
+		<table schema="mornsun" tableName="t_mornsun_product_base" domainObjectName="productBaseModel"/>
+		<table schema="mornsun" tableName="t_mornsun_product_tag" domainObjectName="productTagModel"/>
+		<table schema="mornsun" tableName="t_mornsun_product_param" domainObjectName="productParamModel"/>
+		<table schema="mornsun" tableName="t_mornsun_product_replace" domainObjectName="productReplaceModel"/>
+		<table schema="mornsun" tableName="t_mornsun_search_record" domainObjectName="searchRecordModel"/>
+		<table schema="mornsun" tableName="t_mornsun_search_report" domainObjectName="searchReportModel"/>
+		<table schema="mornsun" tableName="t_mornsun_search_suggest" domainObjectName="searchSuggestModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user" domainObjectName="userModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_answer" domainObjectName="userAnswerModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_attention" domainObjectName="userAttentionModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_coupon" domainObjectName="userCouponModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_course" domainObjectName="userCourseModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_error" domainObjectName="userErrorModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_expert" domainObjectName="userExpertModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_favorite" domainObjectName="userFavoriteModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_footprint" domainObjectName="userFootprintModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_inform" domainObjectName="userInformModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_invite" domainObjectName="userInviteModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_message" domainObjectName="userMessageModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_pay" domainObjectName="userPayModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_praise" domainObjectName="userPraiseModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_profit" domainObjectName="userProfitModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_question" domainObjectName="userQuestionModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_recharge" domainObjectName="userRechargeModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_share" domainObjectName="userShareModel"/>
+		<table schema="mornsun" tableName="t_mornsun_user_suggest" domainObjectName="userSuggestModel"/>
+
+	</context>
+</generatorConfiguration>  

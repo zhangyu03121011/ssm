@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+	<!-- 设置不依赖 -->
+	<dubbo:consumer check="false" timeout="300000" />
+	
+	<!-- JSW接口 -->
+	<dubbo:reference id="applyAreaApi" interface="com.mornsun.jsw.api.api.applyarea.IApplyAreaApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="attaApi" interface="com.mornsun.jsw.api.api.atta.IAttaApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="tagApi" interface="com.mornsun.jsw.api.api.tag.ITagApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="brandApi" interface="com.mornsun.jsw.api.api.brand.IBrandApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="catalogApi" interface="com.mornsun.jsw.api.api.catalog.ICatalogApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="couponApi" interface="com.mornsun.jsw.api.api.coupon.ICouponApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="positionApi" interface="com.mornsun.jsw.api.api.position.IPositionApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productApplyAreaApi" interface="com.mornsun.jsw.api.api.product.applyarea.IProductApplyAreaApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productAttaApi" interface="com.mornsun.jsw.api.api.product.atta.IProductAttaApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productApi" interface="com.mornsun.jsw.api.api.product.base.IProductApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productBaseApi" interface="com.mornsun.jsw.api.api.product.base.IProductBaseApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productSearchApi" interface="com.mornsun.jsw.api.api.product.base.IProductSearchApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productTagApi" interface="com.mornsun.jsw.api.api.product.tag.IProductTagApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productParamApi" interface="com.mornsun.jsw.api.api.product.param.IProductParamApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productReplaceApi" interface="com.mornsun.jsw.api.api.product.replace.IProductReplaceApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="searchRecordApi" interface="com.mornsun.jsw.api.api.search.record.ISearchRecordApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="searchReportApi" interface="com.mornsun.jsw.api.api.search.report.ISearchReportApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="searchSuggestApi" interface="com.mornsun.jsw.api.api.search.suggest.ISearchSuggestApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userAnswerApi" interface="com.mornsun.jsw.api.api.user.answer.IUserAnswerApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userCatalogApi" interface="com.mornsun.jsw.api.api.user.catalog.IUserCatalogApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userAttentionApi" interface="com.mornsun.jsw.api.api.user.attention.IUserAttentionApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userApi" interface="com.mornsun.jsw.api.api.user.base.IUserApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userCouponApi" interface="com.mornsun.jsw.api.api.user.coupon.IUserCouponApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userCourseApi" interface="com.mornsun.jsw.api.api.user.course.IUserCourseApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userErrorApi" interface="com.mornsun.jsw.api.api.user.error.IUserErrorApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userExpertApi" interface="com.mornsun.jsw.api.api.user.expert.IUserExpertApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userFavoriteApi" interface="com.mornsun.jsw.api.api.user.favorite.IUserFavoriteApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userFootprintApi" interface="com.mornsun.jsw.api.api.user.footprint.IUserFootprintApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userInformApi" interface="com.mornsun.jsw.api.api.user.inform.IUserInformApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userInviteApi" interface="com.mornsun.jsw.api.api.user.invite.IUserInviteApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userMessageApi" interface="com.mornsun.jsw.api.api.user.message.IUserMessageApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userPayApi" interface="com.mornsun.jsw.api.api.user.pay.IUserPayApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userPraiseApi" interface="com.mornsun.jsw.api.api.user.praise.IUserPraiseApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userProfitApi" interface="com.mornsun.jsw.api.api.user.profit.IUserProfitApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userQuestionApi" interface="com.mornsun.jsw.api.api.user.question.IUserQuestionApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userRechargeApi" interface="com.mornsun.jsw.api.api.user.recharge.IUserRechargeApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userShareApi" interface="com.mornsun.jsw.api.api.user.share.IUserShareApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userSuggestApi" interface="com.mornsun.jsw.api.api.user.suggest.IUserSuggestApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userOrderApi" interface="com.mornsun.jsw.api.api.user.order.IUserOrderApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="paramApi" interface="com.mornsun.jsw.api.api.param.IParamApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="companyApi" interface="com.mornsun.jsw.api.api.company.base.ICompanyApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="companyCourseApi" interface="com.mornsun.jsw.api.api.company.course.ICompanyCourseApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="payScaleApi" interface="com.mornsun.jsw.api.api.payscale.IPayScaleApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userEmployeeApi" interface="com.mornsun.jsw.api.api.user.employee.IUserEmployeeApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userExtractApi" interface="com.mornsun.jsw.api.api.user.extract.IUserExtractApi" version="${dubbo.svr.version}"/>
+
+</beans>

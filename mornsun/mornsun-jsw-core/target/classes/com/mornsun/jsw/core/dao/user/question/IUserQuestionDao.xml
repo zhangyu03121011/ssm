@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mornsun.jsw.core.dao.user.question.IUserQuestionDao">
+
+  <resultMap id="BaseResultMap" type="UserQuestionVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="answer_user_id" jdbcType="VARCHAR" property="answerUserId" />
+    <result column="read_count" jdbcType="INTEGER" property="readCount" />
+    <result column="answer_count" jdbcType="INTEGER" property="answerCount" />
+    <result column="isavailable" jdbcType="CHAR" property="isavailable" />
+    <result column="is_public" jdbcType="CHAR" property="isPublic" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    
+    <association property="userVo" column="tmp_user_id" javaType="UserVo">
+	    <id column="tmp_user_id" jdbcType="VARCHAR" property="id" />
+	    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="user_alias" jdbcType="VARCHAR" property="userAlias" />
+	    <result column="head_image" jdbcType="VARCHAR" property="headImage" />
+	    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+	    <result column="user_position_id" jdbcType="VARCHAR" property="positionId" />
+	    <result column="random_code" jdbcType="VARCHAR" property="randomCode" />
+	    <result column="user_money" jdbcType="DOUBLE" property="userMoney" />
+	    <result column="user_coupon" jdbcType="DOUBLE" property="userCoupon" />
+	    <result column="user_type" jdbcType="CHAR" property="userType" />
+	    <result column="intro" jdbcType="VARCHAR" property="intro" />
+	    <result column="auth_id" jdbcType="VARCHAR" property="authId" />
+	    <result column="auth_type" jdbcType="CHAR" property="authType" />
+	    <result column="is_push_message" jdbcType="CHAR" property="isPushMessage" />
+	</association>
+	
+    <association property="answerUserVo" column="tmp_answer_user_id" javaType="UserVo">
+	    <id column="tmp_answer_user_id" jdbcType="VARCHAR" property="id" />
+	    <result column="answer_user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="answer_user_alias" jdbcType="VARCHAR" property="userAlias" />
+	    <result column="answer_head_image" jdbcType="VARCHAR" property="headImage" />
+	    <result column="answer_mobile" jdbcType="VARCHAR" property="mobile" />
+	    <result column="answer_user_position_id" jdbcType="VARCHAR" property="positionId" />
+	    <result column="answer_random_code" jdbcType="VARCHAR" property="randomCode" />
+	    <result column="answer_user_money" jdbcType="DOUBLE" property="userMoney" />
+	    <result column="answer_user_coupon" jdbcType="DOUBLE" property="userCoupon" />
+	    <result column="answer_user_type" jdbcType="CHAR" property="userType" />
+	    <result column="answer_intro" jdbcType="VARCHAR" property="intro" />
+	    <result column="answer_auth_id" jdbcType="VARCHAR" property="authId" />
+	    <result column="answer_auth_type" jdbcType="CHAR" property="authType" />
+	    <result column="answer_is_push_message" jdbcType="CHAR" property="isPushMessage" />
+	</association>
+    
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, user_id, title, answer_user_id, read_count, answer_count, isavailable, is_public, 
+    create_by, create_time, update_by, update_time, descr
+  </sql>
+
+  <select id="selectByExample" parameterType="UserQuestionModelCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" parameterType="UserQuestionVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_question
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null">
+	and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="answerUserId != null">
+	and answer_user_id = #{answerUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="isPublic != null">
+	and is_public = #{isPublic,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" parameterType="UserQuestionVo" resultMap="BaseResultMap">
+	select t1.*,
+	    	t2.user_name, t2.user_alias, t2.head_image, t2.mobile, t2.position_id as user_position_id, t2.random_code, 
+    		t2.user_money, t2.user_coupon, t2.user_type, t2.intro, t2.auth_id, t2.auth_type, t2.is_push_message,
+    		t3.user_name as answer_user_name, t3.user_alias as answer_user_alias, t3.head_image as answer_head_image, t3.mobile as answer_mobile, 
+    		t3.position_id as answer_user_position_id, t3.random_code as answer_random_code, 
+    		t3.user_money as answer_user_money, t3.user_coupon as answer_user_coupon, t3.user_type as answer_user_type, t3.intro as answer_intro,
+    		t3.auth_id as answer_auth_id, t3.auth_type as answer_auth_type, t3.is_push_message as answer_is_push_message from (
+    select 
+    	   	t1.*,
+			<choose>  
+	            <when test="queryType != null and queryType=='1'"> 
+	            	null as tmp_user_id,
+	                t1.answer_user_id as tmp_answer_user_id
+	            </when>  
+	            <when test="queryType != null and queryType=='2'">  
+	                t1.user_id as tmp_user_id,
+	                null as tmp_answer_user_id 
+	            </when> 
+	            <otherwise>  
+	            	t1.user_id as tmp_user_id,
+	                t1.answer_user_id as tmp_answer_user_id
+	            </otherwise>  
+            </choose>
+    from t_mornsun_user_question t1
+	<where>
+	1=1
+      <if test="userId != null">
+	and t1.user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null">
+	and t1.title like CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="answerUserId != null">
+	and t1.answer_user_id = #{answerUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="isPublic != null">
+	and t1.is_public = #{isPublic,jdbcType=CHAR}
+      </if>
+      <if test="queryType != null and queryType=='3'">
+	and t1.answer_count is null
+      </if>
+	</where>
+	) t1
+    left join t_mornsun_user t2 on t1.tmp_user_id=t2.id
+    left join t_mornsun_user t3 on t1.tmp_answer_user_id=t3.id
+    where 1=1
+      <if test="userVo!=null and userVo.userName != null">
+      and t2.user_name like CONCAT('%',#{userVo.userName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userVo!=null and answerUserVo.userName != null">
+      and t3.user_name like CONCAT('%',#{answerUserVo.userName,jdbcType=VARCHAR},'%')
+      </if>
+	<if test="hotFlag == true">
+		order by t1.answer_count desc, t1.read_count desc, t1.create_time desc
+	</if>	
+	<if test="hotFlag == false">
+		order by t1.create_time desc
+	</if>
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+	select t1.*,t2.id as tmp_user_id,t3.id as tmp_answer_user_id,
+	    	t2.user_name, t2.user_alias, t2.head_image, t2.mobile, t2.position_id as user_position_id, t2.random_code, 
+    		t2.user_money, t2.user_coupon, t2.user_type, t2.intro, t2.auth_id, t2.auth_type, t2.is_push_message,
+    		t3.user_name as answer_user_name, t3.user_alias as answer_user_alias, t3.head_image as answer_head_image, t3.mobile as answer_mobile, 
+    		t3.position_id as answer_user_position_id, t3.random_code as answer_random_code, 
+    		t3.user_money as answer_user_money, t3.user_coupon as answer_user_coupon, t3.user_type as answer_user_type, t3.intro as answer_intro,
+    		t3.auth_id as answer_auth_id, t3.auth_type as answer_auth_type, t3.is_push_message as answer_is_push_message 
+    from t_mornsun_user_question t1
+    left join t_mornsun_user t2 on t1.user_id=t2.id
+    left join t_mornsun_user t3 on t1.answer_user_id=t3.id
+    where t1.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" parameterType="UserQuestionVo" resultMap="BaseResultMap">
+	select t1.*,t2.id as tmp_user_id,t3.id as tmp_answer_user_id,
+	    	t2.user_name, t2.user_alias, t2.head_image, t2.mobile, t2.position_id as user_position_id, t2.random_code, 
+    		t2.user_money, t2.user_coupon, t2.user_type, t2.intro, t2.auth_id, t2.auth_type, t2.is_push_message,
+    		t3.user_name as answer_user_name, t3.user_alias as answer_user_alias, t3.head_image as answer_head_image, t3.mobile as answer_mobile, 
+    		t3.position_id as answer_user_position_id, t3.random_code as answer_random_code, 
+    		t3.user_money as answer_user_money, t3.user_coupon as answer_user_coupon, t3.user_type as answer_user_type, t3.intro as answer_intro,
+    		t3.auth_id as answer_auth_id, t3.auth_type as answer_auth_type, t3.is_push_message as answer_is_push_message 
+    from t_mornsun_user_question t1
+    left join t_mornsun_user t2 on t1.user_id=t2.id
+    left join t_mornsun_user t3 on t1.answer_user_id=t3.id
+	<where>
+	1=1
+      <if test="userId != null">
+	and t1.user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null">
+	and t1.title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="answerUserId != null">
+	and t1.answer_user_id = #{answerUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null">
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="isPublic != null">
+	and t1.is_public = #{isPublic,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from t_mornsun_user_question
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="UserQuestionModelCriteria">
+    delete from t_mornsun_user_question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="UserQuestionVo">
+    delete from t_mornsun_user_question
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null">
+	and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="answerUserId != null">
+	and answer_user_id = #{answerUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="readCount != null">
+	and read_count = #{readCount,jdbcType=INTEGER}
+      </if>
+      <if test="answerCount != null">
+	and answer_count = #{answerCount,jdbcType=INTEGER}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="isPublic != null">
+	and is_public = #{isPublic,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="UserQuestionVo">
+    insert into t_mornsun_user_question (id, user_id, title, 
+      answer_user_id, read_count, answer_count, 
+       is_public, create_by, 
+      create_time,   
+      descr)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{answerUserId,jdbcType=VARCHAR}, 0, 0, 
+      #{isPublic,jdbcType=CHAR},#{createBy,jdbcType=VARCHAR},
+      sysdate(),  
+      #{descr,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="UserQuestionVo">
+    insert into t_mornsun_user_question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="answerUserId != null">
+        answer_user_id,
+      </if>
+      <if test="readCount != null">
+        read_count,
+      </if>
+      <if test="answerCount != null">
+        answer_count,
+      </if>
+      <if test="isPublic != null">
+        is_public,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="answerUserId != null">
+        #{answerUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount != null">
+        #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="answerCount != null">
+        #{answerCount,jdbcType=INTEGER},
+      </if>
+      <if test="isPublic != null">
+        #{isPublic,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        sysdate(),
+      </if>
+      <if test="descr != null">
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="UserQuestionModelCriteria" resultType="java.lang.Long">
+    select count(*) from t_mornsun_user_question
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="UserQuestionVo" resultType="java.lang.Long">
+    select count(*) from t_mornsun_user_question
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null">
+	and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="answerUserId != null">
+	and answer_user_id = #{answerUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="readCount != null">
+	and read_count = #{readCount,jdbcType=INTEGER}
+      </if>
+      <if test="answerCount != null">
+	and answer_count = #{answerCount,jdbcType=INTEGER}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="isPublic != null">
+	and is_public = #{isPublic,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_mornsun_user_question
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.answerUserId != null">
+        answer_user_id = #{record.answerUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.readCount != null">
+        read_count = #{record.readCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.answerCount != null">
+        answer_count = #{record.answerCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.isavailable != null">
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.isPublic != null">
+        is_public = #{record.isPublic,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null">
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update t_mornsun_user_question
+    set id = #{record.id,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      answer_user_id = #{record.answerUserId,jdbcType=VARCHAR},
+      read_count = #{record.readCount,jdbcType=INTEGER},
+      answer_count = #{record.answerCount,jdbcType=INTEGER},
+      isavailable = #{record.isavailable,jdbcType=CHAR},
+      is_public = #{record.isPublic,jdbcType=CHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="UserQuestionVo">
+    update t_mornsun_user_question
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="answerUserId != null">
+        answer_user_id = #{answerUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="readCount>0">
+        read_count = read_count+#{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="answerCount>0">
+        answer_count = answer_count+#{answerCount,jdbcType=INTEGER},
+      </if>
+      <if test="isavailable != null">
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="isPublic != null">
+        is_public = #{isPublic,jdbcType=CHAR},
+      </if>
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        update_time = sysdate(),
+      <if test="descr != null">
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="UserQuestionVo">
+    update t_mornsun_user_question
+    set user_id = #{userId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      answer_user_id = #{answerUserId,jdbcType=VARCHAR},
+      read_count = #{readCount,jdbcType=INTEGER},
+      answer_count = #{answerCount,jdbcType=INTEGER},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      is_public = #{isPublic,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

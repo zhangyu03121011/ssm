@@ -1,0 +1,555 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mornsun.jsw.core.dao.user.pay.IUserPayDao" >
+
+  <resultMap id="BaseResultMap" type="UserPayVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="order_no" property="orderNo" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="source_id" property="sourceId" jdbcType="VARCHAR" />
+    <result column="source_type" property="sourceType" jdbcType="CHAR" />
+    <result column="money_type" property="moneyType" jdbcType="CHAR" />
+    <result column="pay_money" property="payMoney" jdbcType="DECIMAL" />
+    <result column="pay_type" property="payType" jdbcType="CHAR" />
+    <result column="state" property="state" jdbcType="CHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+    
+    <association property="userVo" column="tmp_user_id" javaType="UserVo">
+	    <id column="tmp_user_id" jdbcType="VARCHAR" property="id" />
+	    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+	    <result column="user_alias" jdbcType="VARCHAR" property="userAlias" />
+	    <result column="head_image" jdbcType="VARCHAR" property="headImage" />
+	    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+	    <result column="user_position_id" jdbcType="VARCHAR" property="positionId" />
+	    <result column="random_code" jdbcType="VARCHAR" property="randomCode" />
+	    <result column="user_money" jdbcType="DOUBLE" property="userMoney" />
+	    <result column="user_coupon" jdbcType="DOUBLE" property="userCoupon" />
+	    <result column="user_type" jdbcType="CHAR" property="userType" />
+	    <result column="intro" jdbcType="VARCHAR" property="intro" />
+	    <result column="auth_id" jdbcType="VARCHAR" property="authId" />
+	    <result column="auth_type" jdbcType="CHAR" property="authType" />
+	    <result column="is_push_message" jdbcType="CHAR" property="isPushMessage" />
+	</association>
+    
+  </resultMap>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List" >
+    id, order_no, user_id, source_id, source_type, money_type, pay_money, pay_type, state, 
+    isavailable, create_by, create_time, update_by, update_time, descr
+  </sql>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="UserPayModelCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" resultMap="BaseResultMap" parameterType="UserPayVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_pay
+	<where>
+	1=1
+      <if test="orderNo != null" >
+	and order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null" >
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null" >
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null" >
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="moneyType != null" >
+	and money_type = #{moneyType,jdbcType=CHAR}
+      </if>
+      <if test="payType != null" >
+	and pay_type = #{payType,jdbcType=CHAR}
+      </if>
+      <if test="state != null" >
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" resultMap="BaseResultMap" parameterType="UserPayVo" >
+    select 
+    	   	t1.*,
+    		t2.id as tmp_user_id,t2.user_name, t2.user_alias, t2.head_image, t2.mobile, t2.position_id as user_position_id, t2.random_code, 
+    		t2.user_money, t2.user_coupon, t2.user_type, t2.intro, t2.auth_id, t2.auth_type, t2.is_push_message
+    from t_mornsun_user_pay t1
+    inner join t_mornsun_user t2 on t1.user_id=t2.id
+	<where>
+	1=1
+      <if test="orderNo != null" >
+	and  t1.order_no like CONCAT('%',#{orderNo,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userVo!=null and userVo.userName != null">
+      and t2.user_name like CONCAT('%',#{userVo.userName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="userId != null" >
+	and t1.user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null" >
+	and t1.source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null" >
+	and t1.source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="moneyType != null" >
+	and t1.money_type = #{moneyType,jdbcType=CHAR}
+      </if>
+      <if test="payType != null" >
+	and t1.pay_type = #{payType,jdbcType=CHAR}
+      </if>
+      <if test="state != null" >
+	and t1.state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+	order by t1.create_time desc
+ </select>
+ 
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_pay
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="getOneObject" parameterType="UserPayVo" resultType="java.lang.Double">
+    select 
+    	SUM(pay_money) as totalMoney
+    from t_mornsun_user_pay
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" resultMap="BaseResultMap" parameterType="UserPayVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_pay
+	<where>
+	1=1
+      <if test="orderNo != null" >
+	and order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null" >
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null" >
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null" >
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="moneyType != null" >
+	and money_type = #{moneyType,jdbcType=CHAR}
+      </if>
+      <if test="payType != null" >
+	and pay_type = #{payType,jdbcType=CHAR}
+      </if>
+      <if test="state != null" >
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String" >
+    delete from t_mornsun_user_pay
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="UserPayModelCriteria" >
+    delete from t_mornsun_user_pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="UserPayVo" >
+    delete from t_mornsun_user_pay
+	<where>
+	1=1
+      <if test="orderNo != null" >
+	and order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null" >
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null" >
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null" >
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="moneyType != null" >
+	and money_type = #{moneyType,jdbcType=CHAR}
+      </if>
+      <if test="payMoney != null" >
+	and pay_money = #{payMoney,jdbcType=DECIMAL}
+      </if>
+      <if test="payType != null" >
+	and pay_type = #{payType,jdbcType=CHAR}
+      </if>
+      <if test="state != null" >
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null" >
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null" >
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null" >
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null" >
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null" >
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="UserPayVo" >
+    insert into t_mornsun_user_pay (id, order_no, user_id, 
+      source_id, source_type, money_type, 
+      pay_money, pay_type, state, 
+       create_by, create_time, 
+        descr
+      )
+    values (#{id,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{sourceId,jdbcType=VARCHAR}, #{sourceType,jdbcType=CHAR}, #{moneyType,jdbcType=CHAR}, 
+      #{payMoney,jdbcType=DECIMAL}, #{payType,jdbcType=CHAR}, #{state,jdbcType=CHAR}, 
+       #{createBy,jdbcType=VARCHAR},sysdate(),
+       #{descr,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="UserPayVo" >
+    insert into t_mornsun_user_pay
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderNo != null" >
+        order_no,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="sourceId != null" >
+        source_id,
+      </if>
+      <if test="sourceType != null" >
+        source_type,
+      </if>
+      <if test="moneyType != null" >
+        money_type,
+      </if>
+      <if test="payMoney != null" >
+        pay_money,
+      </if>
+      <if test="payType != null" >
+        pay_type,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="descr != null" >
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null" >
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null" >
+        #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null" >
+        #{sourceType,jdbcType=CHAR},
+      </if>
+      <if test="moneyType != null" >
+        #{moneyType,jdbcType=CHAR},
+      </if>
+      <if test="payMoney != null" >
+        #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="payType != null" >
+        #{payType,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        sysdate(),
+      </if>
+      <if test="descr != null" >
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="UserPayModelCriteria" resultType="java.lang.Long" >
+    select count(*) from t_mornsun_user_pay
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="UserPayVo" resultType="java.lang.Long">
+    select count(*) from t_mornsun_user_pay
+	<where>
+	1=1
+      <if test="orderNo != null" >
+	and order_no = #{orderNo,jdbcType=VARCHAR}
+      </if>
+      <if test="userId != null" >
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null" >
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null" >
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="moneyType != null" >
+	and money_type = #{moneyType,jdbcType=CHAR}
+      </if>
+      <if test="payType != null" >
+	and pay_type = #{payType,jdbcType=CHAR}
+      </if>
+      <if test="state != null" >
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mornsun_user_pay
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderNo != null" >
+        order_no = #{record.orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceId != null" >
+        source_id = #{record.sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceType != null" >
+        source_type = #{record.sourceType,jdbcType=CHAR},
+      </if>
+      <if test="record.moneyType != null" >
+        money_type = #{record.moneyType,jdbcType=CHAR},
+      </if>
+      <if test="record.payMoney != null" >
+        pay_money = #{record.payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payType != null" >
+        pay_type = #{record.payType,jdbcType=CHAR},
+      </if>
+      <if test="record.state != null" >
+        state = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.isavailable != null" >
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null" >
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map" >
+    update t_mornsun_user_pay
+    set id = #{record.id,jdbcType=VARCHAR},
+      order_no = #{record.orderNo,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      source_id = #{record.sourceId,jdbcType=VARCHAR},
+      source_type = #{record.sourceType,jdbcType=CHAR},
+      money_type = #{record.moneyType,jdbcType=CHAR},
+      pay_money = #{record.payMoney,jdbcType=DECIMAL},
+      pay_type = #{record.payType,jdbcType=CHAR},
+      state = #{record.state,jdbcType=CHAR},
+      isavailable = #{record.isavailable,jdbcType=CHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="UserPayVo" >
+    update t_mornsun_user_pay
+    <set >
+      <if test="orderNo != null" >
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null" >
+        source_id = #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null" >
+        source_type = #{sourceType,jdbcType=CHAR},
+      </if>
+      <if test="moneyType != null" >
+        money_type = #{moneyType,jdbcType=CHAR},
+      </if>
+      <if test="payType != null" >
+        pay_type = #{payType,jdbcType=CHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        update_time = sysdate(),
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="UserPayVo" >
+    update t_mornsun_user_pay
+    set order_no = #{orderNo,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      source_id = #{sourceId,jdbcType=VARCHAR},
+      source_type = #{sourceType,jdbcType=CHAR},
+      money_type = #{moneyType,jdbcType=CHAR},
+      pay_money = #{payMoney,jdbcType=DECIMAL},
+      pay_type = #{payType,jdbcType=CHAR},
+      state = #{state,jdbcType=CHAR},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

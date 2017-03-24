@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/jee  http://www.springframework.org/schema/jee/spring-jee-4.2.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd"
+	default-lazy-init="true">
+
+	<!-- 配置DBCP数据源 -->
+	<!-- 常用的属性： defaultAutoCommit：设置从数据源中返回的连接是否采用自动提交机制，默认值为 true； defaultReadOnly：设置数据源是否仅能执行只读操作， 
+		默认值为 false； maxActive：最大连接数据库连接数，设置为0时，表示没有限制； maxIdle：最大等待连接中的数量，设置为0时，表示没有限制； 
+		maxWait：最大等待秒数，单位为毫秒， 超过时间会报出错误信息； validationQuery：用于验证连接是否成功的查询SQL语句，SQL语句必须至少要返回一行数据， 
+		如你可以简单地设置为：“select count(*) from user”； removeAbandoned：是否自我中断，默认是 false 
+		； removeAbandonedTimeout：几秒后数据连接会自动断开，在removeAbandoned为true，提供该值； logAbandoned：是否记录中断事件， 
+		默认为 false； -->
+	<!-- BasicDataSource提供了close()方法关闭数据源，所以必须设定destroy-method=”close”属性，以便Spring容器关闭时，数据源能够正常关闭。 -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClass}" />
+		<!-- 这里的url属性须注意： 如果使用<value>标签装配url属性，url前后不能有空格、回车、tab等字符，否则无法成功连接 例如： 
+			<property name="url"> <value> jdbc:mysql://localhost:3309/sampledb </value> 
+			</property> -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${jdbc.minIdle}" />
+		<property name="maxWait" value="${jdbc.maxWait}" />
+		<property name="validationQuery" value="${jdbc.validationQuery}" />
+		<property name="testOnBorrow" value="${jdbc.testOnBorrow}" />
+		<property name="testWhileIdle" value="${jdbc.testWhileIdle}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+		<property name="numTestsPerEvictionRun" value="${jdbc.numTestsPerEvictionRun}" />
+		<property name="defaultAutoCommit" value="${jdbc.defaultAutoCommit}" />
+	</bean>
+
+</beans>

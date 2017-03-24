@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mornsun.jsw.core.dao.user.praise.IUserPraiseDao">
+
+  <resultMap id="BaseResultMap" type="UserPraiseVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="source_user_id" jdbcType="VARCHAR" property="sourceUserId" />
+    <result column="source_id" jdbcType="VARCHAR" property="sourceId" />
+    <result column="source_type" jdbcType="CHAR" property="sourceType" />
+    <result column="isavailable" jdbcType="CHAR" property="isavailable" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, user_id, source_user_id, source_id, source_type, isavailable, create_by, create_time, 
+    update_by, update_time, descr
+  </sql>
+
+  <select id="selectByExample" parameterType="UserPraiseModelCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_praise
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" parameterType="UserPraiseVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_praise
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceUserId != null">
+	and source_user_id = #{sourceUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null">
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null">
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" parameterType="UserPraiseVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_praise
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceUserId != null">
+	and source_user_id = #{sourceUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null">
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null">
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_praise
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" parameterType="UserPraiseVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_user_praise
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceUserId != null">
+	and source_user_id = #{sourceUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null">
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null">
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+	limit 1
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from t_mornsun_user_praise
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="UserPraiseModelCriteria">
+    delete from t_mornsun_user_praise
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="UserPraiseVo">
+    delete from t_mornsun_user_praise
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceUserId != null">
+	and source_user_id = #{sourceUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null">
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null">
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="UserPraiseVo">
+    insert into t_mornsun_user_praise (id, user_id, source_user_id, 
+      source_id, source_type,  
+      create_by, create_time,  
+       descr)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{sourceUserId,jdbcType=VARCHAR}, 
+      #{sourceId,jdbcType=VARCHAR}, #{sourceType,jdbcType=CHAR},  
+      #{createBy,jdbcType=VARCHAR}, sysdate(),  
+       #{descr,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="UserPraiseVo">
+    insert into t_mornsun_user_praise
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="sourceUserId != null">
+        source_user_id,
+      </if>
+      <if test="sourceId != null">
+        source_id,
+      </if>
+      <if test="sourceType != null">
+        source_type,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceUserId != null">
+        #{sourceUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null">
+        #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null">
+        #{sourceType,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        sysdate(),
+      </if>
+      <if test="descr != null">
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="UserPraiseModelCriteria" resultType="java.lang.Long">
+    select count(*) from t_mornsun_user_praise
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="UserPraiseVo" resultType="java.lang.Long">
+    select count(*) from t_mornsun_user_praise
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceUserId != null">
+	and source_user_id = #{sourceUserId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceId != null">
+	and source_id = #{sourceId,jdbcType=VARCHAR}
+      </if>
+      <if test="sourceType != null">
+	and source_type = #{sourceType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_mornsun_user_praise
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceUserId != null">
+        source_user_id = #{record.sourceUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceId != null">
+        source_id = #{record.sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sourceType != null">
+        source_type = #{record.sourceType,jdbcType=CHAR},
+      </if>
+      <if test="record.isavailable != null">
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null">
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update t_mornsun_user_praise
+    set id = #{record.id,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      source_user_id = #{record.sourceUserId,jdbcType=VARCHAR},
+      source_id = #{record.sourceId,jdbcType=VARCHAR},
+      source_type = #{record.sourceType,jdbcType=CHAR},
+      isavailable = #{record.isavailable,jdbcType=CHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="UserPraiseVo">
+    update t_mornsun_user_praise
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceUserId != null">
+        source_user_id = #{sourceUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceId != null">
+        source_id = #{sourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceType != null">
+        source_type = #{sourceType,jdbcType=CHAR},
+      </if>
+      <if test="isavailable != null">
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="descr != null">
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="UserPraiseVo">
+    update t_mornsun_user_praise
+    set user_id = #{userId,jdbcType=VARCHAR},
+      source_user_id = #{sourceUserId,jdbcType=VARCHAR},
+      source_id = #{sourceId,jdbcType=VARCHAR},
+      source_type = #{sourceType,jdbcType=CHAR},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

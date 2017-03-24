@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.common</groupId>
+		<artifactId>common</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.common</groupId>
+	<artifactId>common-tool</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>common-tool</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+
+		<!-- common start -->
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-orm-mybatis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-sql</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<!-- common end -->
+
+		<dependency>
+			<groupId>commons-httpclient</groupId>
+			<artifactId>commons-httpclient</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.1</version>
+		</dependency>
+
+	</dependencies>
+</project>

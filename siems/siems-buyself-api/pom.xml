@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.siems</groupId>
+		<artifactId>siems</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.siems</groupId>
+	<artifactId>siems-buyself-api</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>siems-buyself-api</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+
+		<!-- common start -->
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-api</artifactId>
+		</dependency>
+		<!-- common end -->
+
+		<!-- siems start -->
+		<dependency>
+			<groupId>com.siems</groupId>
+			<artifactId>siems-jsw-api</artifactId>
+		</dependency>
+		<!-- siems end -->
+
+	</dependencies>
+</project>

@@ -1,0 +1,375 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.siems.jsw.core.dao.log.ILogDao">
+
+  <resultMap id="BaseResultMap" type="LogVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="operation_type" jdbcType="VARCHAR" property="operationType" />
+    <result column="operation_descr" jdbcType="VARCHAR" property="operationDescr" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, user_id, user_name, operation_type, operation_descr, ip, create_by, create_time, 
+    descr
+  </sql>
+
+  <select id="selectByExample" parameterType="LogModelCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_buyself_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" parameterType="LogVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_log
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="userName != null">
+	and user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="operationType != null">
+	and operation_type = #{operationType,jdbcType=VARCHAR}
+      </if>
+      <if test="operationDescr != null">
+	and operation_descr = #{operationDescr,jdbcType=VARCHAR}
+      </if>
+      <if test="ip != null">
+	and ip = #{ip,jdbcType=VARCHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" parameterType="LogVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_log
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="userName != null">
+	and user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="operationType != null">
+	and operation_type = #{operationType,jdbcType=VARCHAR}
+      </if>
+      <if test="operationDescr != null">
+	and operation_descr = #{operationDescr,jdbcType=VARCHAR}
+      </if>
+      <if test="ip != null">
+	and ip = #{ip,jdbcType=VARCHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_log
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" parameterType="LogVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_buyself_log
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="userName != null">
+	and user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="operationType != null">
+	and operation_type = #{operationType,jdbcType=VARCHAR}
+      </if>
+      <if test="operationDescr != null">
+	and operation_descr = #{operationDescr,jdbcType=VARCHAR}
+      </if>
+      <if test="ip != null">
+	and ip = #{ip,jdbcType=VARCHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from t_buyself_log
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="LogModelCriteria">
+    delete from t_buyself_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="LogVo">
+    delete from t_buyself_log
+	<where>
+	1=1
+      <if test="userId != null">
+	and user_id = #{userId,jdbcType=VARCHAR}
+      </if>
+      <if test="userName != null">
+	and user_name = #{userName,jdbcType=VARCHAR}
+      </if>
+      <if test="operationType != null">
+	and operation_type = #{operationType,jdbcType=VARCHAR}
+      </if>
+      <if test="operationDescr != null">
+	and operation_descr = #{operationDescr,jdbcType=VARCHAR}
+      </if>
+      <if test="ip != null">
+	and ip = #{ip,jdbcType=VARCHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="LogVo">
+    insert into t_buyself_log (id, user_id, user_name, 
+      operation_type, operation_descr, ip, 
+      create_by, create_time, descr
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{operationType,jdbcType=VARCHAR}, #{operationDescr,jdbcType=VARCHAR}, #{ip,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=VARCHAR}, sysdate()
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="LogVo">
+    insert into t_buyself_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="operationType != null">
+        operation_type,
+      </if>
+      <if test="operationDescr != null">
+        operation_descr,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationType != null">
+        #{operationType,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDescr != null">
+        #{operationDescr,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        sysdate(),
+      </if>
+      <if test="descr != null">
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="LogModelCriteria" resultType="java.lang.Long">
+    select count(*) from t_buyself_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+  <update id="updateByExample" parameterType="map">
+    update t_buyself_log
+    set id = #{record.id,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      operation_type = #{record.operationType,jdbcType=VARCHAR},
+      operation_descr = #{record.operationDescr,jdbcType=VARCHAR},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="LogVo">
+    update t_buyself_log
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="operationType != null">
+        operation_type = #{operationType,jdbcType=VARCHAR},
+      </if>
+      <if test="operationDescr != null">
+        operation_descr = #{operationDescr,jdbcType=VARCHAR},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="descr != null">
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="LogVo">
+    update t_buyself_log
+    set user_id = #{userId,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      operation_type = #{operationType,jdbcType=VARCHAR},
+      operation_descr = #{operationDescr,jdbcType=VARCHAR},
+      ip = #{ip,jdbcType=VARCHAR},
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

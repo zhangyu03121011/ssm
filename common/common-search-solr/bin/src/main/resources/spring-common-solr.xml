@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p" 
+	xmlns:solr="http://www.springframework.org/schema/data/solr"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/jee  http://www.springframework.org/schema/jee/spring-jee-4.2.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
+	http://www.springframework.org/schema/data/solr http://www.springframework.org/schema/data/solr/spring-solr-1.0.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd"
+	default-lazy-init="true">
+	
+	<!-- Solr接口 -->
+	<!-- Solrj实现 -->
+	<bean id="solrClient" class="org.apache.solr.client.solrj.impl.HttpSolrClient">
+		<constructor-arg name="baseURL" value="${solr.url}"/>
+		<property name="connectionTimeout" value="${solr.connectionTimeout}" />
+		<!-- socket read timeout -->
+		<property name="soTimeout" value="${solr.soTimeout}" />
+		<property name="defaultMaxConnectionsPerHost" value="${solr.defaultMaxConnectionsPerHost}" />
+		<property name="maxTotalConnections" value="${solr.maxTotalConnections}" />
+		<property name="followRedirects" value="${solr.followRedirects}" />
+		<property name="allowCompression" value="${solr.allowCompression}" />
+		<!-- binary parser is used by default -->
+		<property name="parser" ref="xmlResponseParser" />
+	</bean>
+	<bean id="xmlResponseParser" class="org.apache.solr.client.solrj.impl.XMLResponseParser"/>
+	
+	<!-- Spring Data Solr实现 -->
+	<!-- Enable Solr repositories and configure repository base package -->
+	<!--     <solr:repositories base-package="com.common"/> -->
+	<!--     Configures embedded Solr server -->
+	<!--     <solr:embedded-solr-server id="solrServer" solrHome="${solr.url}"/> -->
+	<!--     Configures Solr template -->
+	<!--     <bean id="solrTemplate" class="org.springframework.data.solr.core.SolrTemplate"> -->
+	<!--         <constructor-arg index="0" ref="solrServer"/> -->
+	<!--     </bean> -->
+	
+</beans>

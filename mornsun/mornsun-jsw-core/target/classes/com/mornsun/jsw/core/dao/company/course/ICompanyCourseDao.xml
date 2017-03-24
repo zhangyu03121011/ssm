@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mornsun.jsw.core.dao.company.course.ICompanyCourseDao" >
+
+  <resultMap id="BaseResultMap" type="CompanyCourseVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="company_id" property="companyId" jdbcType="VARCHAR" />
+    <result column="product_id" property="productId" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="pay_money" property="payMoney" jdbcType="DECIMAL" />
+    <result column="course_type" property="courseType" jdbcType="CHAR" />
+    <result column="read_count" property="readCount" jdbcType="INTEGER" />
+    <result column="praise_count" jdbcType="INTEGER" property="praiseCount" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+    
+    <association property="baseAttaModel" column="atta_id" javaType="BaseAttaModel">
+	    <id column="atta_id" jdbcType="VARCHAR" property="id" />
+	    <result column="source_id" jdbcType="VARCHAR" property="sourceId" />
+	    <result column="source_type" jdbcType="CHAR" property="sourceType" />
+	    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+	    <result column="file_path" jdbcType="VARCHAR" property="filePath" />
+	    <result column="file_size" jdbcType="BIGINT" property="fileSize" />
+	    <result column="file_extend" jdbcType="VARCHAR" property="fileExtend" />
+	</association>
+     
+    <association property="companyVo" column="company_id" javaType="CompanyVo">
+    	<id column="company_id" jdbcType="VARCHAR" property="id" />
+    	<result column="company_name" jdbcType="VARCHAR" property="companyName" />
+	    <result column="company_brand" jdbcType="VARCHAR" property="companyBrand" />
+	</association>
+    
+  </resultMap>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List" >
+    id, company_id, product_id, title, pay_money, course_type, read_count, isavailable, 
+    create_by, create_time, update_by, update_time, descr,praise_count
+  </sql>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="CompanyCourseModelCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mornsun_company_course
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" resultMap="BaseResultMap" parameterType="CompanyCourseVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_company_course
+	<where>
+	1=1
+      <if test="companyId != null" >
+	and company_id = #{companyId,jdbcType=VARCHAR}
+      </if>
+      <if test="productId != null" >
+	and product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null" >
+	and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="courseType != null" >
+	and course_type = #{courseType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" resultMap="BaseResultMap" parameterType="CompanyCourseVo" >
+    SELECT 
+    	t1.*,
+    	ifnull(t1.product_no,t3.product_no) as productNo,
+    	t2.company_name,
+    	t2.company_brand,
+    	t5.id as atta_id,
+    	t5.source_id, 
+    	t5.source_type,
+    	t5.file_name, 
+    	t5.file_path, 
+    	t5.file_size, 
+    	t5.file_extend,
+    	(case when ( select t4.id from t_mornsun_user_praise t4 where t4.user_id=#{currUserId,jdbcType=VARCHAR} and t4.source_id=t1.id limit 1 ) is null then 0 else 1 end ) as isPraise
+    FROM 
+    	t_mornsun_company_course t1
+    LEFT JOIN 
+    	t_mornsun_company t2 
+   	ON 
+    	t1.company_id=t2.id
+    LEFT JOIN 
+    	t_mornsun_product t3 
+   	ON 
+    	t1.product_id=t3.id
+    LEFT JOIN 
+    	t_mornsun_atta t5 
+   	ON 
+    	t1.id=t5.source_id
+	<where>
+	1=1
+      <if test="companyId != null" >
+	and t1.company_id = #{companyId,jdbcType=VARCHAR}
+      </if>
+      <if test="productId != null" >
+	and t1.product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="productNo != null">
+      and t3.product_no like CONCAT('%',#{productNo,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="companyVo!=null and companyVo.companyName != null">
+      and t2.company_name like CONCAT('%',#{companyVo.companyName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="companyVo!=null and companyVo.companyBrand != null">
+      and t2.company_brand like CONCAT('%',#{companyVo.companyBrand,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="title != null" >
+      and t1.title like CONCAT('%',#{title,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="courseType != null" >
+	and t1.course_type = #{courseType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+	order by t1.create_time desc
+ </select>
+
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_company_course
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" resultMap="BaseResultMap" parameterType="CompanyCourseVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_company_course
+	<where>
+	1=1
+      <if test="companyId != null" >
+	and company_id = #{companyId,jdbcType=VARCHAR}
+      </if>
+      <if test="productId != null" >
+	and product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null" >
+	and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="courseType != null" >
+	and course_type = #{courseType,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String" >
+    delete from t_mornsun_company_course
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="CompanyCourseModelCriteria" >
+    delete from t_mornsun_company_course
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="CompanyCourseVo" >
+    delete from t_mornsun_company_course
+	<where>
+	1=1
+      <if test="companyId != null" >
+	and company_id = #{companyId,jdbcType=VARCHAR}
+      </if>
+      <if test="productId != null" >
+	and product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null" >
+	and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="courseType != null" >
+	and course_type = #{courseType,jdbcType=CHAR}
+      </if>
+      <if test="readCount != null" >
+	and read_count = #{readCount,jdbcType=INTEGER}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="CompanyCourseVo" >
+    INSERT INTO 
+    	t_mornsun_company_course (
+	    	id, 
+	    	company_id, 
+	    	product_no,
+	    	product_id, 
+			title, pay_money, 
+			course_type, 
+			read_count,  create_by, 
+			create_time,praise_count,   
+			descr
+		)
+    VALUES (
+		    #{id,jdbcType=VARCHAR},
+		    #{companyId,jdbcType=VARCHAR},
+		    #{productNo,jdbcType=VARCHAR},  
+		    #{productId,jdbcType=VARCHAR}, 
+			#{title,jdbcType=VARCHAR}, 
+			#{payMoney,jdbcType=DECIMAL}, 
+			#{courseType,jdbcType=CHAR}, 
+			0, 
+			#{createBy,jdbcType=VARCHAR}, 
+      		sysdate(),  0,
+      		#{descr,jdbcType=VARCHAR}
+      		)
+  </insert>
+
+  <insert id="insertSelective" parameterType="CompanyCourseVo" >
+    insert into t_mornsun_company_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="companyId != null" >
+        company_id,
+      </if>
+      <if test="productId != null" >
+        product_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="payMoney != null" >
+        pay_money,
+      </if>
+      <if test="courseType != null" >
+        course_type,
+      </if>
+      <if test="readCount != null" >
+        read_count,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="descr != null" >
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="companyId != null" >
+        #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="payMoney != null" >
+        #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="courseType != null" >
+        #{courseType,jdbcType=CHAR},
+      </if>
+      <if test="readCount != null" >
+        #{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        sysdate(),
+      </if>
+      <if test="descr != null" >
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="CompanyCourseModelCriteria" resultType="java.lang.Integer" >
+    select count(*) from t_mornsun_company_course
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="CompanyCourseVo" >
+    select count(*) from t_mornsun_company_course
+	<where>
+	1=1
+      <if test="companyId != null" >
+	and company_id = #{companyId,jdbcType=VARCHAR}
+      </if>
+      <if test="productId != null" >
+	and product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="title != null" >
+	and title = #{title,jdbcType=VARCHAR}
+      </if>
+      <if test="courseType != null" >
+	and course_type = #{courseType,jdbcType=CHAR}
+      </if>
+      <if test="readCount != null" >
+	and read_count = #{readCount,jdbcType=INTEGER}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mornsun_company_course
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyId != null" >
+        company_id = #{record.companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productId != null" >
+        product_id = #{record.productId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payMoney != null" >
+        pay_money = #{record.payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.courseType != null" >
+        course_type = #{record.courseType,jdbcType=CHAR},
+      </if>
+      <if test="record.readCount != null" >
+        read_count = #{record.readCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.isavailable != null" >
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null" >
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map" >
+    UPDATE 
+    	t_mornsun_company_course
+    SET 
+    	id = #{record.id,jdbcType=VARCHAR},
+		company_id = #{record.companyId,jdbcType=VARCHAR},
+		product_id = #{record.productId,jdbcType=VARCHAR},
+		title = #{record.title,jdbcType=VARCHAR},
+		pay_money = #{record.payMoney,jdbcType=DECIMAL},
+		course_type = #{record.courseType,jdbcType=CHAR},
+		read_count = #{record.readCount,jdbcType=INTEGER},
+		isavailable = #{record.isavailable,jdbcType=CHAR},
+		update_by = #{record.updateBy,jdbcType=VARCHAR},
+		update_time = sysdate(),
+		descr = #{record.descr,jdbcType=VARCHAR}
+	    <if test="_parameter != null" >
+	      <include refid="Update_By_Example_Where_Clause" />
+	    </if>
+  </update>
+
+  <update id="update" parameterType="CompanyCourseVo" >
+    update t_mornsun_company_course
+    <set >
+      <if test="companyId != null" >
+        company_id = #{companyId,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null" >
+        product_id = #{productId,jdbcType=VARCHAR},
+      </if>
+       <if test="productNo != null and productNo != ''" >
+        product_no = #{productNo,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="payMoney != null" >
+        pay_money = #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="courseType != null" >
+        course_type = #{courseType,jdbcType=CHAR},
+      </if>
+      <if test="readCount>0" >
+        read_count = read_count+#{readCount,jdbcType=INTEGER},
+      </if>
+      <if test="praiseCount>0">
+        praise_count = praise_count+#{praiseCount,jdbcType=INTEGER},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        update_time = sysdate(),
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="CompanyCourseVo" >
+    update t_mornsun_company_course
+    set company_id = #{companyId,jdbcType=VARCHAR},
+      product_id = #{productId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      pay_money = #{payMoney,jdbcType=DECIMAL},
+      course_type = #{courseType,jdbcType=CHAR},
+      read_count = #{readCount,jdbcType=INTEGER},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

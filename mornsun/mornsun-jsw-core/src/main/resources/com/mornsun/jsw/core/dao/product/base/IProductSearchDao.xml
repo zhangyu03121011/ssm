@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mornsun.jsw.core.dao.product.base.IProductSearchDao">
+
+  <resultMap id="BaseResultMap" type="SearchVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+    <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+    <result column="brand_id" jdbcType="VARCHAR" property="brandId" />
+    <result column="state" jdbcType="CHAR" property="state" />
+    <result column="isavailable" jdbcType="CHAR" property="isavailable" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    
+    <association property="productBaseVo" column="product_id" javaType="ProductBaseVo">
+        <id column="base_id" jdbcType="VARCHAR" property="id" />
+	    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+	    <result column="product_state" jdbcType="CHAR" property="productState" />
+	    <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
+	</association>
+    
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    id, product_no, catalog_id, brand_id, state, isavailable, create_by, create_time, 
+    update_by, update_time, descr
+  </sql>
+
+<select id="getPage" parameterType="SearchVo" resultMap="BaseResultMap">
+    SELECT 
+	    t1.id, t1.product_no, t1.catalog_id, t1.brand_id, t1.state, t1.isavailable, t1.create_by, t1.create_time, t1.update_by, t1.update_time, t1.descr,
+	    t2.id as base_id,t2.product_id, t2.product_state, t2.product_desc, 
+	    t4.user_alias as updateUserAlias
+    from t_mornsun_product t1 
+	left join t_mornsun_product_base t2 on t1.id=t2.product_id
+	left join t_mornsun_user t4 on (case when t1.update_by is null then t1.create_by else t1.update_by end)=t4.id
+	<where>
+	1=1
+      <if test="keyword != null">
+      and (
+      	upper(t1.product_no) like CONCAT('%',upper(trim(#{keyword,jdbcType=VARCHAR})),'%')
+      or 
+      	upper(t2.product_desc) like CONCAT('%',upper(trim(#{keyword,jdbcType=VARCHAR})),'%')
+      )
+      </if>
+      <if test="catalogId != null">
+	and t1.catalog_id = #{catalogId,jdbcType=VARCHAR}
+      </if>
+      <if test="brandId != null">
+	and t1.brand_id = #{brandId,jdbcType=VARCHAR}
+      </if>
+	and t1.isavailable = 1
+	and t1.state = 1
+	</where>
+	order by t1.create_time desc
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT 
+	    t1.id, t1.product_no, t1.catalog_id, t1.brand_id, t1.state, t1.isavailable, t1.create_by, t1.create_time, t1.update_by, t1.update_time, t1.descr,
+	    t2.id as base_id,t2.product_id, t2.product_state, t2.product_desc, 
+	    t4.user_alias as updateUserAlias 
+    from t_mornsun_product t1 
+	left join t_mornsun_product_base t2 on t1.id=t2.product_id
+	left join t_mornsun_user t4 on (case when t1.update_by is null then t1.create_by else t1.update_by end)=t4.id
+    where t1.id = #{id,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

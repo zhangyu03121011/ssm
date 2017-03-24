@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/jee  http://www.springframework.org/schema/jee/spring-jee-4.2.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.2.xsd"
+	default-lazy-init="true">
+	
+	<!-- 配置Proxool数据源 -->
+	<bean id="dataSource" class="org.logicalcobwebs.proxool.ProxoolDataSource">
+        <property name="driver" value="${jdbc.driverClass}"/>
+        <property name="driverUrl" value="${jdbc.url}"/>
+        <property name="user" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 测试的SQL执行语句 -->
+       <property name="houseKeepingTestSql" value="${jdbc.houseKeepingTestSql}"/>
+        <!-- 最少保持的空闲连接数 （默认2个） -->
+         <property name="prototypeCount" value="${jdbc.prototypeCount}"/>
+        <!-- proxool自动侦察各个连接状态的时间间隔(毫秒),侦察到空闲的连接就马上回收,超时的销毁 默认30秒） -->
+        <property name="houseKeepingSleepTime" value="${jdbc.houseKeepingSleepTime}"/>
+        <!-- 最大活动时间(超过此时间线程将被kill,默认为5分钟) -->
+         <property name="maximumActiveTime" value="${jdbc.maximumActiveTime}"/>
+        <!-- 连接最长时间(默认为4个小时) -->
+        <property name="maximumConnectionLifetime" value="${jdbc.maximumConnectionLifetime}"/>
+        <!-- 最小连接数 （默认2个） -->
+        <property name="minimumConnectionCount" value="${jdbc.minimumConnectionCount}"/>
+        <!-- 最大连接数 （默认5个） -->
+        <property name="maximumConnectionCount" value="${jdbc.maximumConnectionCount}"/>
+        <!-- 连接池使用状况统计。 参数“10s,1m,1d” -->
+        <property name="statistics" value="${jdbc.statistics}"/>
+        <!-- 日志统计跟踪类型。 参数“ERROR”或 “INFO” -->
+      	<property name="statisticsLogLevel" value="${jdbc.statisticsLogLevel}"/>
+        <!-- 别名 -->
+        <property name="alias" value="${jdbc.alias}"/>
+        <!-- 
+	      	  这是我们可一次建立的最大连接数。那就是新增的连接请求,但还没有可供使用的连接。由于
+			连接可以使用多线程,在有限的时间之间建立联系从而带来可用连接，但是我们需要通过一些方式确认一些线程并不是立即响应
+			连接请求的，默认是10。
+		-->
+        <property name="simultaneousBuildThrottle" value="${jdbc.simultaneousBuildThrottle}"/>
+     </bean>
+	
+</beans>

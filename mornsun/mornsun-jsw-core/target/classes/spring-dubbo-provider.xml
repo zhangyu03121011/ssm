@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+	<!-- dubbo端口号20794 -->
+	<dubbo:protocol name="dubbo" port="${dubbo.provider.port}" dispather="all" threadpool="cached" threads="${dubbo.provider.threads}" />
+		
+	<!-- mornsun对外提供的接口 -->
+	<!-- 声明需要暴露的服务接口 -->
+	<dubbo:service id="applyAreaApi" interface="com.mornsun.jsw.api.api.applyarea.IApplyAreaApi" ref="applyAreaApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="attaApi" interface="com.mornsun.jsw.api.api.atta.IAttaApi" ref="attaApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="tagApi" interface="com.mornsun.jsw.api.api.tag.ITagApi" ref="tagApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="brandApi" interface="com.mornsun.jsw.api.api.brand.IBrandApi" ref="brandApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="catalogApi" interface="com.mornsun.jsw.api.api.catalog.ICatalogApi" ref="catalogApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="couponApi" interface="com.mornsun.jsw.api.api.coupon.ICouponApi" ref="couponApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="positionApi" interface="com.mornsun.jsw.api.api.position.IPositionApi" ref="positionApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productApplyAreaApi" interface="com.mornsun.jsw.api.api.product.applyarea.IProductApplyAreaApi" ref="productApplyAreaApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productAttaApi" interface="com.mornsun.jsw.api.api.product.atta.IProductAttaApi" ref="productAttaApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productSearchApi" interface="com.mornsun.jsw.api.api.product.base.IProductSearchApi" ref="productSearchApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productApi" interface="com.mornsun.jsw.api.api.product.base.IProductApi" ref="productApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productBaseApi" interface="com.mornsun.jsw.api.api.product.base.IProductBaseApi" ref="productBaseApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productTagApi" interface="com.mornsun.jsw.api.api.product.tag.IProductTagApi" ref="productTagApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productParamApi" interface="com.mornsun.jsw.api.api.product.param.IProductParamApi" ref="productParamApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="productReplaceApi" interface="com.mornsun.jsw.api.api.product.replace.IProductReplaceApi" ref="productReplaceApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="searchRecordApi" interface="com.mornsun.jsw.api.api.search.record.ISearchRecordApi" ref="searchRecordApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="searchReportApi" interface="com.mornsun.jsw.api.api.search.report.ISearchReportApi" ref="searchReportApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="searchSuggestApi" interface="com.mornsun.jsw.api.api.search.suggest.ISearchSuggestApi" ref="searchSuggestApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userAnswerApi" interface="com.mornsun.jsw.api.api.user.answer.IUserAnswerApi" ref="userAnswerApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userCatalogApi" interface="com.mornsun.jsw.api.api.user.catalog.IUserCatalogApi" ref="userCatalogApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userAttentionApi" interface="com.mornsun.jsw.api.api.user.attention.IUserAttentionApi" ref="userAttentionApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userApi" interface="com.mornsun.jsw.api.api.user.base.IUserApi" ref="userApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userCouponApi" interface="com.mornsun.jsw.api.api.user.coupon.IUserCouponApi" ref="userCouponApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userCourseApi" interface="com.mornsun.jsw.api.api.user.course.IUserCourseApi" ref="userCourseApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userErrorApi" interface="com.mornsun.jsw.api.api.user.error.IUserErrorApi" ref="userErrorApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userExpertApi" interface="com.mornsun.jsw.api.api.user.expert.IUserExpertApi" ref="userExpertApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userFavoriteApi" interface="com.mornsun.jsw.api.api.user.favorite.IUserFavoriteApi" ref="userFavoriteApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userFootprintApi" interface="com.mornsun.jsw.api.api.user.footprint.IUserFootprintApi" ref="userFootprintApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userInformApi" interface="com.mornsun.jsw.api.api.user.inform.IUserInformApi" ref="userInformApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userInviteApi" interface="com.mornsun.jsw.api.api.user.invite.IUserInviteApi" ref="userInviteApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userMessageApi" interface="com.mornsun.jsw.api.api.user.message.IUserMessageApi" ref="userMessageApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userPayApi" interface="com.mornsun.jsw.api.api.user.pay.IUserPayApi" ref="userPayApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userDealApi" interface="com.mornsun.jsw.api.api.user.deal.IUserDealApi" ref="userDealApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userPraiseApi" interface="com.mornsun.jsw.api.api.user.praise.IUserPraiseApi" ref="userPraiseApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userProfitApi" interface="com.mornsun.jsw.api.api.user.profit.IUserProfitApi" ref="userProfitApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userQuestionApi" interface="com.mornsun.jsw.api.api.user.question.IUserQuestionApi" ref="userQuestionApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userRechargeApi" interface="com.mornsun.jsw.api.api.user.recharge.IUserRechargeApi" ref="userRechargeApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userShareApi" interface="com.mornsun.jsw.api.api.user.share.IUserShareApi" ref="userShareApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userSuggestApi" interface="com.mornsun.jsw.api.api.user.suggest.IUserSuggestApi" ref="userSuggestApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userOrderApi" interface="com.mornsun.jsw.api.api.user.order.IUserOrderApi" ref="userOrderApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="paramApi" interface="com.mornsun.jsw.api.api.param.IParamApi" ref="paramApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="companyApi" interface="com.mornsun.jsw.api.api.company.base.ICompanyApi" ref="companyApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="companyCourseApi" interface="com.mornsun.jsw.api.api.company.course.ICompanyCourseApi" ref="companyCourseApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="payScaleApi" interface="com.mornsun.jsw.api.api.payscale.IPayScaleApi" ref="payScaleApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userEmployeeApi" interface="com.mornsun.jsw.api.api.user.employee.IUserEmployeeApi" ref="userEmployeeApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+	<dubbo:service id="userExtractApi" interface="com.mornsun.jsw.api.api.user.extract.IUserExtractApi" ref="userExtractApiImpl" version="${dubbo.svr.version}" owner="luohj"/>
+
+</beans>

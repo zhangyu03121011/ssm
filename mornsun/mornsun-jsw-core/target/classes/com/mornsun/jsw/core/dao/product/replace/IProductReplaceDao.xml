@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mornsun.jsw.core.dao.product.replace.IProductReplaceDao">
+
+  <resultMap id="BaseResultMap" type="ProductReplaceVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="product_id" jdbcType="VARCHAR" property="productId" />
+    <result column="replace_product_id" jdbcType="VARCHAR" property="replaceProductId" />
+    <result column="match_type" jdbcType="CHAR" property="matchType" />
+    <result column="state" jdbcType="CHAR" property="state" />
+    <result column="isavailable" jdbcType="CHAR" property="isavailable" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="VARCHAR" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="descr" jdbcType="VARCHAR" property="descr" />
+    
+    <result column="product_no" jdbcType="VARCHAR" property="productNo" />
+    <result column="catalog_id" jdbcType="VARCHAR" property="catalogId" />
+    <result column="brand_id" jdbcType="VARCHAR" property="brandId" />
+    <result column="product_desc" jdbcType="VARCHAR" property="productDesc" />
+    
+    <result column="replace_product_no" jdbcType="VARCHAR" property="replaceProductNo" />
+    <result column="replace_catalog_id" jdbcType="VARCHAR" property="replaceCatalogId" />
+    <result column="replace_brand_id" jdbcType="VARCHAR" property="replaceBrandId" />
+    <result column="replace_product_desc" jdbcType="VARCHAR" property="replaceProductDesc" />
+    
+    <association property="productCommonVo" javaType="ProductCommonVo">
+	    <result column="catalog_name" jdbcType="VARCHAR" property="catalogName" />
+	    <result column="brand_name" jdbcType="CHAR" property="brandName" />
+	</association> 
+	
+    <association property="productCommonReplaceVo" javaType="ProductCommonVo">
+	    <result column="replace_catalog_name" jdbcType="VARCHAR" property="catalogName" />
+	    <result column="replace_brand_name" jdbcType="CHAR" property="brandName" />
+	</association> 
+    
+  </resultMap>
+
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List">
+    id, product_id, replace_product_id, match_type, state, isavailable, create_by, create_time, 
+    update_by, update_time, descr
+  </sql>
+
+  <select id="selectByExample" parameterType="ProductReplaceModelCriteria" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mornsun_product_replace
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" parameterType="ProductReplaceVo" resultMap="BaseResultMap">
+    select 
+    	t1.id, t1.product_id, t1.replace_product_id, t1.match_type, t1.state, t1.isavailable, t1.create_by, t1.create_time, 
+    	t1.update_by, t1.update_time, t1.descr,
+    	t2.product_no, t2.catalog_id, t2.brand_id,t2.product_desc,
+    	t3.product_no as replace_product_no, t3.catalog_id as replace_catalog_id, t3.brand_id as replace_brand_id,t3.product_desc as replace_product_desc
+    from t_mornsun_product_replace t1
+    left join 
+    (
+    	SELECT t1.id,t1.product_no, t1.catalog_id, t1.brand_id,t2.product_desc 
+		from t_mornsun_product t1 INNER JOIN t_mornsun_product_base t2 on t1.id=t2.product_id
+	) t2 on t1.product_id=t2.id
+    left join 
+	(
+    	SELECT t1.id,t1.product_no, t1.catalog_id, t1.brand_id,t2.product_desc 
+		from t_mornsun_product t1 INNER JOIN t_mornsun_product_base t2 on t1.id=t2.product_id
+	) t3 on t1.replace_product_id=t3.id
+	<where>
+	1=1
+      <if test="productId != null">
+	and t1.product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="replaceProductId != null">
+	and t1.replace_product_id = #{replaceProductId,jdbcType=VARCHAR}
+      </if>
+      <if test="matchType != null">
+	and t1.match_type = #{matchType,jdbcType=CHAR}
+      </if>
+      <if test="state != null">
+	and t1.state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" parameterType="ProductReplaceVo" resultMap="BaseResultMap">
+    select 
+    	t1.id, t1.product_id, t1.replace_product_id, t1.match_type, t1.state, t1.isavailable, t1.create_by, t1.create_time, 
+    	t1.update_by, t1.update_time, t1.descr,
+    	t2.product_no, t2.catalog_id, t2.brand_id,t2.product_desc,t2.brand_name,t2.catalog_name,
+    	t3.product_no as replace_product_no, t3.catalog_id as replace_catalog_id, t3.brand_id as replace_brand_id,
+    	t3.product_desc as replace_product_desc,t3.brand_name as replace_brand_name,t3.catalog_name as replace_catalog_name
+    from t_mornsun_product_replace t1
+    left join 
+    (
+    	SELECT t1.id,t1.product_no, t1.catalog_id, t1.brand_id,t2.product_desc,t3.brand_name,t4.catalog_name 
+		from t_mornsun_product t1 
+		INNER JOIN t_mornsun_product_base t2 on t1.id=t2.product_id
+		left join t_mornsun_brand t3 on t1.brand_id=t3.id
+		left join t_mornsun_catalog t4 on t1.catalog_id=t4.id
+	) t2 on t1.product_id=t2.id
+    left join 
+	(
+    	SELECT t1.id,t1.product_no, t1.catalog_id, t1.brand_id,t2.product_desc,t3.brand_name,t4.catalog_name 
+		from t_mornsun_product t1 
+		INNER JOIN t_mornsun_product_base t2 on t1.id=t2.product_id
+		left join t_mornsun_brand t3 on t1.brand_id=t3.id
+		left join t_mornsun_catalog t4 on t1.catalog_id=t4.id
+	) t3 on t1.replace_product_id=t3.id
+	<where>
+	1=1
+      <if test="productNo != null">
+      and t2.product_no like CONCAT('%',#{productNo,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="productCommonVo!=null and productCommonVo.catalogName != null">
+      and t2.catalog_name like CONCAT('%',#{productCommonVo.catalogName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="productCommonVo!=null and productCommonVo.brandName != null">
+      and t2.brand_name like CONCAT('%',#{productCommonVo.brandName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="productId != null">
+	and t1.product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="replaceProductId != null">
+	and t1.replace_product_id = #{replaceProductId,jdbcType=VARCHAR}
+      </if>
+      <if test="matchType != null">
+	and t1.match_type = #{matchType,jdbcType=CHAR}
+      </if>
+      <if test="state != null">
+	and t1.state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+	order by t1.create_time desc
+ </select>
+
+  <select id="getOneById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_product_replace
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" parameterType="ProductReplaceVo" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_product_replace
+	<where>
+	1=1
+      <if test="productId != null">
+	and product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="replaceProductId != null">
+	and replace_product_id = #{replaceProductId,jdbcType=VARCHAR}
+      </if>
+      <if test="matchType != null">
+	and match_type = #{matchType,jdbcType=CHAR}
+      </if>
+      <if test="state != null">
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String">
+    delete from t_mornsun_product_replace
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="ProductReplaceModelCriteria">
+    delete from t_mornsun_product_replace
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="ProductReplaceVo">
+    delete from t_mornsun_product_replace
+	<where>
+	1=1
+      <if test="productId != null">
+	and product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="replaceProductId != null">
+	and replace_product_id = #{replaceProductId,jdbcType=VARCHAR}
+      </if>
+      <if test="matchType != null">
+	and match_type = #{matchType,jdbcType=CHAR}
+      </if>
+      <if test="state != null">
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+      <if test="createBy != null">
+	and create_by = #{createBy,jdbcType=VARCHAR}
+      </if>
+      <if test="createTime != null">
+	and create_time = #{createTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="updateBy != null">
+	and update_by = #{updateBy,jdbcType=VARCHAR}
+      </if>
+      <if test="updateTime != null">
+	and update_time = #{updateTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="descr != null">
+	and descr = #{descr,jdbcType=VARCHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="ProductReplaceVo">
+    insert into t_mornsun_product_replace (id, product_id, replace_product_id, 
+      match_type, state,  
+      create_by, create_time,  
+       descr)
+    values (#{id,jdbcType=VARCHAR}, #{productId,jdbcType=VARCHAR}, #{replaceProductId,jdbcType=VARCHAR}, 
+      #{matchType,jdbcType=CHAR}, #{state,jdbcType=CHAR},  
+      #{createBy,jdbcType=VARCHAR}, sysdate(),  
+       #{descr,jdbcType=VARCHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="ProductReplaceVo">
+    insert into t_mornsun_product_replace
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="replaceProductId != null">
+        replace_product_id,
+      </if>
+      <if test="matchType != null">
+        match_type,
+      </if>
+      <if test="state != null">
+        state,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="descr != null">
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceProductId != null">
+        #{replaceProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="matchType != null">
+        #{matchType,jdbcType=CHAR},
+      </if>
+      <if test="state != null">
+        #{state,jdbcType=CHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        sysdate(),
+      </if>
+      <if test="descr != null">
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="ProductReplaceModelCriteria" resultType="java.lang.Long">
+    select count(*) from t_mornsun_product_replace
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="ProductReplaceVo" resultType="java.lang.Long">
+    select count(*) from t_mornsun_product_replace
+	<where>
+	1=1
+      <if test="productId != null">
+	and product_id = #{productId,jdbcType=VARCHAR}
+      </if>
+      <if test="replaceProductId != null">
+	and replace_product_id = #{replaceProductId,jdbcType=VARCHAR}
+      </if>
+      <if test="matchType != null">
+	and match_type = #{matchType,jdbcType=CHAR}
+      </if>
+      <if test="state != null">
+	and state = #{state,jdbcType=CHAR}
+      </if>
+      <if test="isavailable != null">
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map">
+    update t_mornsun_product_replace
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replaceProductId != null">
+        replace_product_id = #{record.replaceProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.matchType != null">
+        match_type = #{record.matchType,jdbcType=CHAR},
+      </if>
+      <if test="record.state != null">
+        state = #{record.state,jdbcType=CHAR},
+      </if>
+      <if test="record.isavailable != null">
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null">
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map">
+    update t_mornsun_product_replace
+    set id = #{record.id,jdbcType=VARCHAR},
+      product_id = #{record.productId,jdbcType=VARCHAR},
+      replace_product_id = #{record.replaceProductId,jdbcType=VARCHAR},
+      match_type = #{record.matchType,jdbcType=CHAR},
+      state = #{record.state,jdbcType=CHAR},
+      isavailable = #{record.isavailable,jdbcType=CHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="ProductReplaceVo">
+    update t_mornsun_product_replace
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=VARCHAR},
+      </if>
+      <if test="replaceProductId != null">
+        replace_product_id = #{replaceProductId,jdbcType=VARCHAR},
+      </if>
+      <if test="matchType != null">
+        match_type = #{matchType,jdbcType=CHAR},
+      </if>
+      <if test="state != null">
+        state = #{state,jdbcType=CHAR},
+      </if>
+      <if test="isavailable != null">
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        update_time = sysdate(),
+      <if test="descr != null">
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="ProductReplaceVo">
+    update t_mornsun_product_replace
+    set product_id = #{productId,jdbcType=VARCHAR},
+      replace_product_id = #{replaceProductId,jdbcType=VARCHAR},
+      match_type = #{matchType,jdbcType=CHAR},
+      state = #{state,jdbcType=CHAR},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

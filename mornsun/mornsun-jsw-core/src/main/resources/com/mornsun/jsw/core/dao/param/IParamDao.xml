@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mornsun.jsw.core.dao.param.IParamDao" >
+
+  <resultMap id="BaseResultMap" type="ParamVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="catalog_id" property="catalogId" jdbcType="VARCHAR" />
+    <result column="param_name" property="paramName" jdbcType="VARCHAR" />
+    <result column="isavailable" property="isavailable" jdbcType="CHAR" />
+    <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_by" property="updateBy" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="descr" property="descr" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+
+  <sql id="Base_Column_List" >
+    id, catalog_id, param_name, isavailable, create_by, create_time, update_by, update_time, 
+    descr
+  </sql>
+
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="ParamModelCriteria" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_mornsun_param
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+
+<select id="getAll" resultMap="BaseResultMap" parameterType="ParamVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_param
+	<where>
+	1=1
+      <if test="catalogId != null" >
+	and catalog_id = #{catalogId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramName != null" >
+	and param_name = #{paramName,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+<select id="getPage" resultMap="BaseResultMap" parameterType="ParamVo" >
+    select 
+    	t1.*,t2.catalog_name as catalogName
+    from t_mornsun_param t1
+    inner join t_mornsun_catalog t2 on t1.catalog_id=t2.id
+	<where>
+	1=1
+      <if test="catalogId != null" >
+	and t1.catalog_id = #{catalogId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramName != null">
+      and t1.param_name like CONCAT('%',#{paramName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="catalogName != null">
+      and t2.catalog_name like CONCAT('%',#{catalogName,jdbcType=VARCHAR},'%')
+      </if>
+      <if test="isavailable != null" >
+	and t1.isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+	order by t1.catalog_id asc,CONVERT( t1.param_name USING gbk ) COLLATE gbk_chinese_ci asc
+ </select>
+
+  <select id="getOneById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_param
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+<select id="getOne" resultMap="BaseResultMap" parameterType="ParamVo" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_mornsun_param
+	<where>
+	1=1
+      <if test="catalogId != null" >
+	and catalog_id = #{catalogId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramName != null" >
+	and param_name = #{paramName,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <delete id="deleteById" parameterType="java.lang.String" >
+    delete from t_mornsun_param
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByExample" parameterType="ParamModelCriteria" >
+    delete from t_mornsun_param
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+
+<delete id="delete" parameterType="ParamVo" >
+    delete from t_mornsun_param
+	<where>
+	1=1
+      <if test="catalogId != null" >
+	and catalog_id = #{catalogId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramName != null" >
+	and param_name = #{paramName,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </delete>
+
+  <insert id="insert" parameterType="ParamVo" >
+    insert into t_mornsun_param (id, catalog_id, param_name, 
+       create_by, create_time, 
+        descr
+      )
+    values (#{id,jdbcType=VARCHAR}, #{catalogId,jdbcType=VARCHAR}, #{paramName,jdbcType=VARCHAR}, 
+       #{createBy,jdbcType=VARCHAR},sysdate(),
+       #{descr,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="ParamVo" >
+    insert into t_mornsun_param
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="catalogId != null" >
+        catalog_id,
+      </if>
+      <if test="paramName != null" >
+        param_name,
+      </if>
+      <if test="createBy != null" >
+        create_by,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="descr != null" >
+        descr,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="catalogId != null" >
+        #{catalogId,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null" >
+        #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null" >
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        sysdate(),
+      </if>
+      <if test="descr != null" >
+        #{descr,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="countByExample" parameterType="ParamModelCriteria" resultType="java.lang.Long" >
+    select count(*) from t_mornsun_param
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+
+<select id="getCount" parameterType="ParamVo" resultType="java.lang.Long" >
+    select count(*) from t_mornsun_param
+	<where>
+	1=1
+      <if test="catalogId != null" >
+	and catalog_id = #{catalogId,jdbcType=VARCHAR}
+      </if>
+      <if test="paramName != null" >
+	and param_name = #{paramName,jdbcType=VARCHAR}
+      </if>
+      <if test="isavailable != null" >
+	and isavailable = #{isavailable,jdbcType=CHAR}
+      </if>
+	</where>
+ </select>
+
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_mornsun_param
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.catalogId != null" >
+        catalog_id = #{record.catalogId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paramName != null" >
+        param_name = #{record.paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isavailable != null" >
+        isavailable = #{record.isavailable,jdbcType=CHAR},
+      </if>
+      <if test="record.updateBy != null" >
+        update_by = #{record.updateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = sysdate(),
+      </if>
+      <if test="record.descr != null" >
+        descr = #{record.descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="updateByExample" parameterType="map" >
+    update t_mornsun_param
+    set id = #{record.id,jdbcType=VARCHAR},
+      catalog_id = #{record.catalogId,jdbcType=VARCHAR},
+      param_name = #{record.paramName,jdbcType=VARCHAR},
+      isavailable = #{record.isavailable,jdbcType=CHAR},
+      update_by = #{record.updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{record.descr,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+
+  <update id="update" parameterType="ParamVo" >
+    update t_mornsun_param
+    <set >
+      <if test="catalogId != null" >
+        catalog_id = #{catalogId,jdbcType=VARCHAR},
+      </if>
+      <if test="paramName != null" >
+        param_name = #{paramName,jdbcType=VARCHAR},
+      </if>
+      <if test="isavailable != null" >
+        isavailable = #{isavailable,jdbcType=CHAR},
+      </if>
+        update_by = #{updateBy,jdbcType=VARCHAR},
+        update_time = sysdate(),
+      <if test="descr != null" >
+        descr = #{descr,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="ParamVo" >
+    update t_mornsun_param
+    set catalog_id = #{catalogId,jdbcType=VARCHAR},
+      param_name = #{paramName,jdbcType=VARCHAR},
+      isavailable = #{isavailable,jdbcType=CHAR},
+      update_by = #{updateBy,jdbcType=VARCHAR},
+      update_time = sysdate(),
+      descr = #{descr,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

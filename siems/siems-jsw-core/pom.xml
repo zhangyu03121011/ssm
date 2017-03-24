@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.siems</groupId>
+		<artifactId>siems</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.siems</groupId>
+	<artifactId>siems-jsw-core</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>siems-jsw-core</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+
+		<!-- siems start -->
+		<dependency>
+			<groupId>com.siems</groupId>
+			<artifactId>siems-jsw-api</artifactId>
+		</dependency>
+		<!-- siems end -->
+
+		<!-- common start -->
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-datasource</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-service</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-orm-mybatis</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.common</groupId>
+			<artifactId>common-rpc-dubbo</artifactId>
+		</dependency>
+		<!-- common end -->
+
+		<!-- commons end -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+		</dependency>
+		<!-- commons end -->
+
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/src/main/java</directory>
+				<includes>
+					<include>**/*.xml</include>
+					<include>**/*.xlsx</include>
+					<include>**/*.xls</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+</project>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+	<!-- 设置不依赖 -->
+	<dubbo:consumer check="false" timeout="300000" />
+	
+	<!-- JSW接口 -->
+	<dubbo:reference id="brandApi" interface="com.siems.jsw.api.api.brand.IBrandApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="customerApi" interface="com.siems.jsw.api.api.customer.ICustomerApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="deptApi" interface="com.siems.jsw.api.api.dept.IDeptApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="displayApi" interface="com.siems.jsw.api.api.display.base.IDisplayApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="displayHarewareApi" interface="com.siems.jsw.api.api.display.hareware.IDisplayHarewareApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="displayPortApi" interface="com.siems.jsw.api.api.display.port.IDisplayPortApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="functionApi" interface="com.siems.jsw.api.api.function.IFunctionApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="hardwareApi" interface="com.siems.jsw.api.api.hardware.IHardwareApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="logApi" interface="com.siems.jsw.api.api.log.ILogApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="mediaApi" interface="com.siems.jsw.api.api.media.IMediaApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productApi" interface="com.siems.jsw.api.api.product.base.IProductApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productShopApi" interface="com.siems.jsw.api.api.product.shop.IProductShopApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="productTypeApi" interface="com.siems.jsw.api.api.product.type.IProductTypeApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="roleApi" interface="com.siems.jsw.api.api.role.base.IRoleApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="roleFunctionApi" interface="com.siems.jsw.api.api.role.function.IRoleFunctionApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="shopApi" interface="com.siems.jsw.api.api.shop.IShopApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="softApi" interface="com.siems.jsw.api.api.soft.ISoftApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userApi" interface="com.siems.jsw.api.api.user.base.IUserApi" version="${dubbo.svr.version}"/>
+	<dubbo:reference id="userRoleApi" interface="com.siems.jsw.api.api.user.role.IUserRoleApi" version="${dubbo.svr.version}"/>
+
+</beans>
