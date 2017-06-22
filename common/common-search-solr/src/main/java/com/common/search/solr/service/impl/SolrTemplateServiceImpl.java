@@ -35,7 +35,7 @@ public class SolrTemplateServiceImpl<T> extends BaseLogger implements ISolrTempl
     public T getOne(SimpleQuery query) throws Exception {
         T obj = null;
         try {
-            obj = solrTemplate.queryForObject(query, ReflectUtil.getInstance().getClassGenricType(this.getClass()));
+//            obj = solrTemplate.queryForObject(query, ReflectUtil.getInstance().getClassGenricType(this.getClass()));
             logger.info("[SolrTemplateServiceImpl][getOne]");
 
         } catch (Exception e) {
@@ -51,7 +51,7 @@ public class SolrTemplateServiceImpl<T> extends BaseLogger implements ISolrTempl
         T obj = null;
         try {
 
-            obj = solrTemplate.getById(id, ReflectUtil.getInstance().getClassGenricType(this.getClass()));
+//            obj = solrTemplate.getById(id, ReflectUtil.getInstance().getClassGenricType(this.getClass()));
             logger.info("[SolrTemplateServiceImpl][getOneById]");
 
         } catch (Exception e) {
