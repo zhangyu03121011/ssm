@@ -65,7 +65,7 @@
 		<rabbit.version>3.6.5</rabbit.version>
 		<rabbit.spring.version>1.6.1.RELEASE</rabbit.spring.version>
 		<!-- solr版本 -->
-		<solr.version>6.1.0</solr.version>
+		<solr.version>8.4.1</solr.version>
 		<solr.spring.version>2.0.2.RELEASE</solr.spring.version>
 		<!-- redis版本 -->
 		<redis.version>2.9.0</redis.version>
