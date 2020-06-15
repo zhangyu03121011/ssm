@@ -43,7 +43,7 @@
 		<!-- common版本 -->
 		<common.version>0.0.1-SNAPSHOT</common.version>
 		<!-- spring版本 -->
-		<spring.version>4.3.2.RELEASE</spring.version>
+		<spring.version>5.2.7.RELEASE</spring.version>
 		<!-- memcache版本 -->
 		<memcache.version>2.6.6</memcache.version>
 		<!-- log版本 -->
