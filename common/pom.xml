@@ -93,7 +93,7 @@
 		<!-- websocket版本 -->
 		<websocket.version>1.1</websocket.version>
 		<!-- other版本 -->
-		<quartz.version>2.2.3</quartz.version>
+		<quartz.version>2.3.2</quartz.version>
 		<poi.version>3.14</poi.version>
 		<mail.version>1.5.5</mail.version>
 		<!-- nexus地址 -->
