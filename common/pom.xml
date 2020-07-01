@@ -78,7 +78,7 @@
 		<!-- junit版本 -->
 		<junit.version>4.12</junit.version>
 		<!-- mysql版本 -->
-		<mysql.version>5.1.38</mysql.version>
+		<mysql.version>8.0.16</mysql.version>
 		<!-- druid版本 -->
 		<druid.version>1.0.24</druid.version>
 		<!-- dubbo版本 -->
