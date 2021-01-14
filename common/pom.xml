@@ -94,7 +94,7 @@
 		<websocket.version>1.1</websocket.version>
 		<!-- other版本 -->
 		<quartz.version>2.2.3</quartz.version>
-		<poi.version>3.14</poi.version>
+		<poi.version>4.1.2</poi.version>
 		<mail.version>1.5.5</mail.version>
 		<!-- nexus地址 -->
 		<nexus.content>http://120.76.65.211:8081/nexus/content</nexus.content>
