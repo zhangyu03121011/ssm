@@ -87,7 +87,7 @@
 		<zookeeper.version>3.4.8</zookeeper.version>
 		<zkclient.version>0.1</zkclient.version>
 		<!-- httpclient版本 -->
-		<httpclient.version>4.5.2</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<!-- freemarker版本 -->
 		<freemarker.version>2.3.23</freemarker.version>
 		<!-- websocket版本 -->
