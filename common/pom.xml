@@ -71,7 +71,7 @@
 		<redis.version>2.9.0</redis.version>
 		<redis.spring.version>1.7.5.RELEASE</redis.spring.version>
 		<!-- Elasticsearch版本 -->
-		<elasticsearch.version>2.3.5</elasticsearch.version>
+		<elasticsearch.version>6.8.15</elasticsearch.version>
 		<elasticsearch.jest.version>2.0.3</elasticsearch.jest.version>
 		<elasticsearch.pilato.version>2.1.0</elasticsearch.pilato.version>
 		<elasticsearch.spring.version>2.0.2.RELEASE</elasticsearch.spring.version>
